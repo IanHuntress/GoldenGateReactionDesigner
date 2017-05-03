@@ -1,0 +1,2360 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Experimental_Driver_Jan2017</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-02-24"><meta name="DC.source" content="Experimental_Driver_Jan2017.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#1">Quentin Leitz</a></li><li><a href="#2">Read Inputs from Accompanying Excel Workbook</a></li><li><a href="#3">Test Parameters for Validity</a></li><li><a href="#4">Create the Reverse String</a></li><li><a href="#5">Define Palindromic Sequences to Avoid</a></li><li><a href="#6">Step Through and Record all Potential Overhang Choices</a></li><li><a href="#7">Catalog Overhangs Already Specified by the Dropout Insert/Repeat Region</a></li><li><a href="#8">Perform Random Walk to Find an Acceptable Solution</a></li><li><a href="#9">Display Overhang Selection</a></li><li><a href="#10">Perform Comparisons Between all Overhang Choices and Create Match Index</a></li><li><a href="#11">Make Choices about the Order of Overhangs in the Final Assembly</a></li><li><a href="#12">Print the Assembly with Instructions</a></li><li><a href="#13">Display the Final Results</a></li><li><a href="#14">Export output to Excel</a></li><li><a href="#15">Final Completion Statement and Time Elapsed</a></li></ul></div><h2>Quentin Leitz<a name="1"></a></h2><p>Koffas Lab Research Updated January 21, 2017 CRISPR Planner Driving File</p><pre class="codeinput">close <span class="string">all</span>
+clear
+clc
+</pre><h2>Read Inputs from Accompanying Excel Workbook<a name="2"></a></h2><pre class="codeinput">tic <span class="comment">%Begin timer.</span>
+
+[Parameters,Strings,~] = xlsread(<span class="string">'Accompanying Excel Workbook.xlsx'</span>,<span class="string">'Example'</span>,<span class="string">'H4:I29'</span>);
+<span class="comment">%Read in parameters and strings from the Excel sheet.</span>
+
+Repeatstring = Capitalize(char(Strings(2,:))); <span class="comment">%Forward direction repeat region.</span>
+Repeatlength = length(Repeatstring);        <span class="comment">%Length of the repeat region.</span>
+Spacernum = Parameters(1);                  <span class="comment">%Desired number of spacers in the final array.</span>
+Overhangsize = Parameters(3);               <span class="comment">%Bp for the desired overhang size.</span>
+Spacerlength = Parameters(5);               <span class="comment">%Bp for the desired spacer.</span>
+Overhangnum = (2*Spacernum)+2;              <span class="comment">%Number of overhangs to be defined.</span>
+Desireddropseq_bin = Parameters(7);         <span class="comment">%Binary for specifying initial dropout insert sequence.</span>
+Desiredseq_bin = Parameters(10);            <span class="comment">%Binary for specifying sequence of CRISPR spacers, in order.</span>
+Desiredspacerorder_bin = Parameters(13);    <span class="comment">%Binary for specifying multiple spacer options for each array location.</span>
+Desiredenz_bin = Parameters(17);            <span class="comment">%Binary for specifying the assembly enzyme.</span>
+Orderoligos = Parameters(20);               <span class="comment">%Binary for specifying whether to order oligos or primers.</span>
+Naming_bin = Parameters(23);                <span class="comment">%Binary for specifying the prefix of names in the output.</span>
+</pre><h2>Test Parameters for Validity<a name="3"></a></h2><pre class="codeinput"><span class="keyword">if</span> isempty(Repeatstring) || isnan(Spacernum) || isnan(Overhangsize) || isnan(Spacerlength) <span class="keyword">...</span>
+        || isnan(Desireddropseq_bin) || isnan(Desiredseq_bin) || isnan(Desiredspacerorder_bin) <span class="keyword">...</span>
+        || isnan(Desiredenz_bin) || isnan(Orderoligos)
+    <span class="comment">%If the user hasn't provided any of the critical parameters in Inputs.</span>
+    fprintf(<span class="string">'ERROR: You have not provided sufficient parameters in the Inputs section.\n'</span>);
+    <span class="keyword">return</span>
+<span class="keyword">else</span>
+<span class="keyword">end</span>
+
+<span class="keyword">if</span> Desiredseq_bin == 1 &amp;&amp; Desiredspacerorder_bin == 1 <span class="comment">%Make sure E and F are not both selected.</span>
+    fprintf(<span class="string">'ERROR: You may not set both E and F equal to 1 at the same time. They are mutually exclusive options.\n'</span>);
+    <span class="keyword">return</span>
+<span class="keyword">else</span>
+<span class="keyword">end</span>
+
+<span class="keyword">if</span> Desireddropseq_bin == 1
+    <span class="comment">%Create dropout sequence based on whether or not user has specified it.</span>
+    [~,Dropoutseq,~] = xlsread(<span class="string">'Accompanying Excel Workbook.xlsx'</span>,<span class="string">'Example'</span>,<span class="string">'E36:I36'</span>);
+    Dropoutseq = Capitalize(char(Dropoutseq));              <span class="comment">%Convert to char.</span>
+    Reversedropoutseq = InvertNucs(Dropoutseq); <span class="comment">%Create reverse sequence.</span>
+<span class="keyword">else</span> <span class="comment">%If no dropout sequence, use generic 'DDDD...' instead.</span>
+    Dropoutseq = char(68*ones(1,Spacerlength));
+    Reversedropoutseq = Dropoutseq;             <span class="comment">%Create reverse sequence.</span>
+<span class="keyword">end</span>
+
+<span class="keyword">if</span> Desiredseq_bin == 1 <span class="comment">%If we are trying to specify the insert sequences, in order.</span>
+    [~,Spacerseq,~] = xlsread(<span class="string">'Accompanying Excel Workbook.xlsx'</span>,<span class="string">'Example'</span>,<span class="string">'E39:E54'</span>); <span class="comment">%Read in insert sequences.</span>
+    Spacerseq = Capitalize(char(Spacerseq));         <span class="comment">%Convert to char.</span>
+    [rows, columns] = size(Spacerseq);
+    <span class="keyword">if</span> rows ~= Spacernum <span class="comment">%If the user specified too many/too few spacer sequences.</span>
+        fprintf(<span class="string">'ERROR: The number of spacers specified in A must match the number of spacer sequences provided.\n'</span>);
+        <span class="keyword">return</span>
+    <span class="keyword">else</span>
+    <span class="keyword">end</span>
+
+    <span class="keyword">for</span> i = 1:rows <span class="comment">%If the user's spacer sequences are the wrong length.</span>
+        TestChar = char(cellstr(Spacerseq(i,:)));
+        <span class="keyword">if</span> length(Spacerseq(i,:)) ~= Spacerlength || length(TestChar) ~= Spacerlength
+            fprintf(<span class="string">'ERROR: The length of spacers specified in C must match the length of spacer sequences provided.\n'</span>);
+            <span class="keyword">return</span>
+        <span class="keyword">else</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">else</span>
+<span class="keyword">end</span>
+
+<span class="keyword">if</span> Desiredspacerorder_bin == 1 <span class="comment">%If the user wants multiple spacer options for each location</span>
+    [~,Spaceroptionseq,~] = xlsread(<span class="string">'Accompanying Excel Workbook.xlsx'</span>,<span class="string">'Example'</span>,<span class="string">'E59:T74'</span>); <span class="comment">%Read in spacer options</span>
+    [rows, columns] = size(Spaceroptionseq);
+    <span class="keyword">if</span> columns &lt; Spacernum <span class="comment">%If the user didn't provide enough spacer options</span>
+        fprintf(<span class="string">'ERROR: There must be the same number of spacer options as specified in A\n'</span>);
+        <span class="keyword">return</span>
+    <span class="keyword">elseif</span> columns &gt; Spacernum <span class="comment">%If the user provided too many spacer options, trim to the first ones)</span>
+        Spaceroptionseq = Spaceroptionseq(:,1:Spacernum);
+    <span class="keyword">end</span>
+
+    Spaceroptioncount = zeros(1,Spacernum); <span class="comment">%Counts how many options for each spacer location</span>
+
+    <span class="keyword">for</span> i = 1:Spacernum <span class="comment">%Step through spacer locations A,B,C...</span>
+        <span class="keyword">for</span> j = 1:rows <span class="comment">%Step through options for each location 1,2,3...</span>
+            charSpaceroptionseq = char(Spaceroptionseq(j,i));
+            <span class="keyword">if</span> length(charSpaceroptionseq) ~= Spacerlength <span class="comment">%Test that the spacer options are the correct length</span>
+                <span class="keyword">if</span> j == 1 <span class="comment">%If there is a bad spacer</span>
+                    fprintf(<span class="string">'ERROR: There must be at least one spacer specified for each option.\n'</span>);
+                    fprintf(<span class="string">'Make sure your spacer options start at row 1 (Excel row 15) and proceed downwards.\n'</span>);
+                    <span class="keyword">return</span>
+                <span class="keyword">else</span>
+                    fprintf(<span class="string">'ERROR: Make sure that your spacers are the length specified in C.\n'</span>);
+                    <span class="keyword">return</span>
+                <span class="keyword">end</span>
+
+            <span class="keyword">else</span>
+                Spaceroptioncount(i) = Spaceroptioncount(i) + 1;
+            <span class="keyword">end</span>
+
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+<span class="keyword">else</span>
+
+<span class="keyword">end</span>
+
+<span class="keyword">if</span> Desiredenz_bin == 1 <span class="comment">%If the user wants to specify the assembly enzyme sequence.</span>
+    [~,Enzseq,~] = xlsread(<span class="string">'Accompanying Excel Workbook.xlsx'</span>,<span class="string">'Example'</span>,<span class="string">'E77'</span>); <span class="comment">%Read in enzyme sequence.</span>
+    Enzseq = [<span class="string">'5''-'</span> char(Enzseq)];
+<span class="keyword">else</span>
+    Enzseq = <span class="string">'5''-CCGGCCAGAG'</span>;
+<span class="keyword">end</span>
+
+<span class="keyword">if</span> Orderoligos == 1 <span class="comment">%If the user wants to order primers, read in primer overlap length.</span>
+    <span class="comment">%If they don't want to order primers, then just use the default value.</span>
+    <span class="comment">%(8) for coloring purposes in the Procedure sections.</span>
+    Primeroverlap = 8; <span class="comment">%Bp into the desired spacer our primers should overlap (Default value).</span>
+<span class="keyword">else</span>
+    Primeroverlap = xlsread(<span class="string">'Accompanying Excel Workbook.xlsx'</span>,<span class="string">'Example'</span>,<span class="string">'J79'</span>);
+<span class="keyword">end</span>
+
+<span class="keyword">if</span> Naming_bin == 1 <span class="comment">%If the user wants to specify a naming prefix for the outputs.</span>
+    [~,Prefix,~] = xlsread(<span class="string">'Accompanying Excel Workbook.xlsx'</span>,<span class="string">'Example'</span>,<span class="string">'J81'</span>); <span class="comment">%Read in oligo/PCR product prefix.</span>
+    Prefix = [char(Prefix) <span class="string">'_'</span>];
+<span class="keyword">else</span>
+    Prefix = <span class="string">'X_'</span>; <span class="comment">%If no naming prefix specified, use the generic option.</span>
+<span class="keyword">end</span>
+</pre><h2>Create the Reverse String<a name="4"></a></h2><pre class="codeinput">Repeatstringrev = InvertNucs(Repeatstring); <span class="comment">%Complement for the repeat region.</span>
+
+fprintf(<span class="string">'The DNA looks like: \n'</span>);          <span class="comment">%Print 5'-&gt;3' and 3'-&gt;5'.</span>
+disp([Repeatstring;Repeatstringrev]);
+
+Repeatstringrev = fliplr(Repeatstringrev);  <span class="comment">%Flip RepeatStringRev for proper readibility.</span>
+</pre><pre class="codeoutput">The DNA looks like: 
+AATTTCTACTGTTGTAGAT
+TTAAAGATGACAACATCTA
+</pre><h2>Define Palindromic Sequences to Avoid<a name="5"></a></h2><pre class="codeinput">[Position, Length, Pal] = palindromes(Repeatstring,<span class="string">'Length'</span>,Overhangsize,<span class="string">'Complement'</span>, true);
+<span class="comment">%Searches through the repeatstring and finds all palindromic sequences.</span>
+<span class="comment">%These sequences are the same in the reverse string, so two overhangs</span>
+<span class="comment">%should be discarded for each palindromic sequence found here.</span>
+
+<span class="keyword">for</span> i = 1:length(Position)
+    <span class="keyword">if</span> Length(i) == Overhangsize
+        Palindromestorage(i) = Pal(i);      <span class="comment">%Stores palindromic sequences.</span>
+    <span class="keyword">else</span>
+
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">if</span> exist(<span class="string">'Palindromestorage'</span>, <span class="string">'var'</span>)
+    <span class="comment">%If we have a palindrome storage vector, we caught some palindromes.</span>
+    Palindromestorage = char(Palindromestorage); <span class="comment">%Converts to char for printing.</span>
+    [Palrows,~] = size(Palindromestorage);
+
+    fprintf(<span class="string">'\nOverhangs removed due to palindromes: %d\n'</span>, 2*Palrows); <span class="comment">%Print result.</span>
+    disp(Palindromestorage);
+<span class="keyword">else</span> <span class="comment">%If we don't, print that we did not find any palindromes.</span>
+    Palrows = 0;
+    fprintf(<span class="string">'\nOverhangs removed due to palindromes: %d\n'</span>,Palrows);
+
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">
+Overhangs removed due to palindromes: 0
+</pre><h2>Step Through and Record all Potential Overhang Choices<a name="6"></a></h2><pre class="codeinput">Overhangstorage = zeros(2*(Repeatlength-Overhangsize+1),Overhangsize);
+Overhangdesc = zeros(2*(Repeatlength-Overhangsize+1),2);
+Loc = 1;
+Palfailed = 0;
+Palfailcounter = 0;
+
+<span class="keyword">for</span> i = 1:2 <span class="comment">%i=1: 5'-&gt;3'; i=2: 3'-&gt;5'</span>
+    <span class="keyword">for</span> j = 1:Repeatlength-Overhangsize+1
+        <span class="keyword">if</span> Palrows ~= 0
+            <span class="keyword">for</span> k = 1:Palrows       <span class="comment">%Test whether overhang equals any of our palindromes.</span>
+                <span class="keyword">if</span> i == 1
+                    <span class="keyword">if</span> Repeatstring(j:j+Overhangsize-1) == Palindromestorage(k,:)
+                        Palfailed = 1;  <span class="comment">%If it does, Failed = 1 and don't add to storage.</span>
+                    <span class="keyword">else</span>
+                    <span class="keyword">end</span>
+                <span class="keyword">else</span>
+                    <span class="keyword">if</span> Repeatstringrev(j:j+Overhangsize-1) == Palindromestorage(k,:)
+                        Palfailed = 1;  <span class="comment">%If it does, Failed = 1 and don't add to storage.</span>
+                    <span class="keyword">else</span>
+                    <span class="keyword">end</span>
+                <span class="keyword">end</span>
+            <span class="keyword">end</span>
+        <span class="keyword">else</span>
+        <span class="keyword">end</span>
+
+        <span class="keyword">if</span> Palfailed == 1;      <span class="comment">%Track number of palindromic overhangs caught.</span>
+            Palfailcounter = Palfailcounter+1;
+        <span class="keyword">else</span>
+        <span class="keyword">end</span>
+
+        <span class="keyword">if</span> i == 1 &amp;&amp; Palfailed == 0; <span class="comment">%5'-&gt;3' and not a palindrome.</span>
+            Overhangdesc(Loc,1) = i; <span class="comment">%Whether we're 5'-&gt;3' or 3'-&gt; 5'.</span>
+            Overhangdesc(Loc,2) = j; <span class="comment">%Start location in the repeat.</span>
+            Overhangstorage(Loc,1:Overhangsize) = Repeatstring(j:j+Overhangsize-1); <span class="comment">%Overhang BPs.</span>
+            Loc = Loc+1;             <span class="comment">%Step forward with the counter variable.</span>
+
+        <span class="keyword">elseif</span> i == 2 &amp;&amp; Palfailed == 0; <span class="comment">%3'-&gt;5' and not a palindrome.</span>
+            Overhangdesc(Loc,1) = i; <span class="comment">%Whether we're 5'-&gt;3' or 3'-&gt; 5'.</span>
+            Overhangdesc(Loc,2) = j+Repeatlength; <span class="comment">%Start location in the repeat.</span>
+            Overhangstorage(Loc,1:Overhangsize) = fliplr(Repeatstringrev(j:j+Overhangsize-1)); <span class="comment">%Overhang BPs.</span>
+            Loc = Loc+1;             <span class="comment">%Step forward with the counter variable.</span>
+
+        <span class="keyword">else</span>
+        <span class="keyword">end</span>
+
+        Palfailed = 0; <span class="comment">%Reset palindrome fail variable for next overhang.</span>
+        <span class="comment">%To test if all palindromes were caught, ensure that</span>
+        <span class="comment">%Palfailcounter = 2*Palrows.</span>
+    <span class="keyword">end</span>
+
+<span class="keyword">end</span>
+
+[rows, ~] = size(Overhangstorage);
+
+<span class="comment">%Trim Overhangstorage to remove rows initialized but never filled</span>
+<span class="comment">%due to palindromic sequences.</span>
+Overhangstorage = Overhangstorage(1:rows-Palfailcounter,:);
+Overhangdesc = Overhangdesc(1:rows-Palfailcounter,:);
+
+Overhangstorage = char(Overhangstorage); <span class="comment">%Convert to character array.</span>
+</pre><h2>Catalog Overhangs Already Specified by the Dropout Insert/Repeat Region<a name="7"></a></h2><pre class="codeinput">Backboneoverhangs = [fliplr(Repeatstringrev(1:Overhangsize)) ; Repeatstring(2:Overhangsize+1)];
+Specifiedoverhangs = [Backboneoverhangs ; InvertNucs(Backboneoverhangs)];
+
+<span class="comment">%Store the locations of those backbone overhangs</span>
+Specifiedoverhanginfo = [Repeatlength+1 ; 2 ; Repeatlength-Overhangsize+1 ; <span class="keyword">...</span>
+    2*Repeatlength-Overhangsize];
+
+[rows, ~] = size(Specifiedoverhangs);
+Numspecoverhangs = rows;
+</pre><h2>Perform Random Walk to Find an Acceptable Solution<a name="8"></a></h2><pre class="codeinput">Progress = 0;                               <span class="comment">%The number of choices we have made.</span>
+Progresstarget = Spacernum-1;               <span class="comment">%Target number of choices to make for Progress.</span>
+
+Choiceinfomid1 = (1+Repeatlength)/2;        <span class="comment">%Middle of repeat bp in the 5'-&gt;3' direction.</span>
+Choiceinfomid2 = (3*Repeatlength+2)/2;      <span class="comment">%Middle of repeat bp in the 3'-&gt;5' direction.</span>
+
+Compilspecoverhangs = Specifiedoverhangs;       <span class="comment">%Initial compiled specified overhangs equals those set by the backbone.</span>
+Compilnumspecoverhangs = Numspecoverhangs;      <span class="comment">%Initial number of specified overhangs equals number specified by the backbone.</span>
+Compilspecoverhanginfo = Specifiedoverhanginfo; <span class="comment">%Initial compiled locations are those specified by the backbone.</span>
+
+badchoice = false;                          <span class="comment">%Whether or not we have made a bad choice on this while loop.</span>
+badchoicecount = 1;                         <span class="comment">%How many bad choices we have made.</span>
+badchoicedetails = -1;                      <span class="comment">%Stores our degree of Progress when we realize our choice was bad.</span>
+
+Failed = 0;                                 <span class="comment">%Whether or not we failed (ran out of options to test). This breaks while loop.</span>
+
+[rowsOverhangstorage,~] = size(Overhangstorage); <span class="comment">%Store size of overhangstorage for looping.</span>
+
+<span class="keyword">while</span> length(Compilspecoverhangs) &lt; Overhangnum
+    <span class="comment">%Loop until we have the final number of overhangs required.</span>
+    clear <span class="string">Potentialchoice</span> <span class="string">Choiceinfo</span> <span class="string">Choicemismatchinfo</span>     <span class="comment">%Clear these vectors which are built on each iteration.</span>
+    clear <span class="string">Consolpotentialchoice</span> <span class="string">Consolchoiceinfo</span> <span class="string">Consolchoicemismatchinfo</span>
+    Mismatchvec = zeros(Compilnumspecoverhangs,1);  <span class="comment">%Initialize mismatchvec size based on # of specified overhangs.</span>
+
+    <span class="keyword">if</span> badchoice == true <span class="comment">%If we went down a path that ran out of options.</span>
+        Progress = 0;                               <span class="comment">%Reset progress.</span>
+        Compilspecoverhangs = Specifiedoverhangs;   <span class="comment">%Reset specified overhangs.</span>
+        Compilnumspecoverhangs = Numspecoverhangs;  <span class="comment">%Reset number of specified overhangs.</span>
+        Compilspecoverhanginfo = Specifiedoverhanginfo; <span class="comment">%Reset locations of specified overhangs.</span>
+        clear <span class="string">Choicestorage</span>                         <span class="comment">%Reset previous choices.</span>
+        clear <span class="string">Choiceinfostorage</span>                     <span class="comment">%Reset previous choice locations.</span>
+
+        badchoice = false;                          <span class="comment">%Reset badchoice binary.</span>
+
+    <span class="keyword">else</span>
+    <span class="keyword">end</span>
+
+    Loc = 1;
+    <span class="comment">%Set location counter, which is used to specify the storage of</span>
+    <span class="comment">%potential overhang choices and their information.</span>
+
+    <span class="keyword">for</span> i = 1:rowsOverhangstorage   <span class="comment">%Scan through all overhangs.</span>
+
+        <span class="keyword">for</span> j = 1:Compilnumspecoverhangs      <span class="comment">%Compare overhang to specified overhangs.</span>
+            Mismatchvec(j) = sum(Overhangstorage(i,:) ~= Compilspecoverhangs(j,:));
+            <span class="comment">%Count the number of mismatches between the overhang being</span>
+            <span class="comment">%tested and each of the already specified overhangs.</span>
+
+        <span class="keyword">end</span>
+
+        Triedandfailed = false;
+
+        <span class="keyword">if</span> exist(<span class="string">'Choicestorage'</span>, <span class="string">'var'</span>) <span class="comment">%If this not our first choice</span>
+            <span class="keyword">for</span> j = 1:length(badchoicedetails) <span class="comment">%Scan through previous bad choices</span>
+                <span class="keyword">if</span> badchoicedetails(j) == Progress+1 <span class="keyword">...</span>
+                        &amp;&amp; all(all((badchoicestorage(1:Progress,4*j-3:4*j) == Choicestorage) == 1)) <span class="keyword">...</span>
+                        &amp;&amp; all((badchoicestorage(Progress+1,4*j-3:4*j) == Overhangstorage(i,:)) == 1)
+                    <span class="comment">%Conditions:</span>
+                    <span class="comment">%1. If we have failed at i before and are searching for i.</span>
+                    <span class="comment">%2. If our choices to this point have been the same as</span>
+                    <span class="comment">%       those where we failed.</span>
+                    <span class="comment">%3. If the overhang we're considering is the same as the</span>
+                    <span class="comment">%       one we have previously chosen and failed with.</span>
+                    Triedandfailed = true;
+
+                <span class="keyword">else</span>
+                <span class="keyword">end</span>
+            <span class="keyword">end</span>
+
+        <span class="keyword">else</span> <span class="comment">%If this is our first choice (Can't use Choicestorage in if statement below).</span>
+            <span class="keyword">for</span> j = 1:length(badchoicedetails) <span class="comment">%Scan through previous bad choices.</span>
+                <span class="keyword">if</span> badchoicedetails(j) == Progress+1 <span class="keyword">...</span>
+                        &amp;&amp; all((badchoicestorage(Progress+1,4*j-3:4*j) == Overhangstorage(i,:)) == 1)
+                    <span class="comment">%Conditions:</span>
+                    <span class="comment">%1. If we have failed at i before and are searching for i</span>
+                    <span class="comment">%2. If the overhang we're considering is the same as the</span>
+                    <span class="comment">%       one we have previously chosen and failed with.</span>
+                    Triedandfailed = true;
+
+                <span class="keyword">else</span>
+                <span class="keyword">end</span>
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+
+        <span class="keyword">if</span> any(Mismatchvec &lt;= 1) || Triedandfailed == true
+            <span class="comment">%Conditions:</span>
+            <span class="comment">%1. When there is 1 or less mismatch, that means 3-4 bps are</span>
+            <span class="comment">%   the same between the selected overhang and overhangs</span>
+            <span class="comment">%   already specified. Too similar.</span>
+            <span class="comment">%2. Trash options we have already tried and failed with.</span>
+
+            <span class="comment">%If this is the case, Potentialchoice is never created and the</span>
+            <span class="comment">%next if statement fails. This triggers badchoice protocol.</span>
+
+
+        <span class="keyword">else</span> <span class="comment">%Store options which are at least 2 bp different.</span>
+            Potentialchoice(Loc,1:Overhangsize) = Overhangstorage(i,:);
+            <span class="comment">%Store overhang info.</span>
+            Choiceinfo(Loc,1) = Overhangdesc(i,2);          <span class="comment">%Store choice location index.</span>
+            Choicemismatchinfo(Loc,1) = sum(Mismatchvec);   <span class="comment">%Store mismatch information.</span>
+            Loc = Loc+1; <span class="comment">%Counter for building choice vectors.</span>
+
+        <span class="keyword">end</span>
+        Mismatchvec = zeros(length(Compilspecoverhangs),1); <span class="comment">%Reset mismatchvec.</span>
+
+    <span class="keyword">end</span>
+
+    <span class="keyword">if</span> exist(<span class="string">'Potentialchoice'</span>, <span class="string">'var'</span>)
+        <span class="comment">%If we have at least one potential choice.</span>
+        [rows, ~] = size(Potentialchoice);    <span class="comment">%Check size of potential choice vector.</span>
+        <span class="keyword">if</span> rows &gt;= Progresstarget-Progress
+            <span class="comment">%If there are more potential choices than the number of</span>
+            <span class="comment">%decisions we have left to make, this path could be viable.</span>
+            Sufficientsolutions = true;
+
+        <span class="keyword">else</span>    <span class="comment">%If there are not enough potential choices, we failed.</span>
+            Sufficientsolutions = false;
+        <span class="keyword">end</span>
+    <span class="keyword">else</span>        <span class="comment">%If there are no potential choices, we failed.</span>
+        Sufficientsolutions = false;
+    <span class="keyword">end</span>
+
+    <span class="keyword">if</span> exist(<span class="string">'Potentialchoice'</span>, <span class="string">'var'</span>) &amp;&amp; Sufficientsolutions == true
+        <span class="comment">%Conditions:</span>
+        <span class="comment">%1. Make sure we found a solution, at least one solution.</span>
+        <span class="comment">%2. Ensure we have enough choices available to possibly succeed</span>
+        <span class="comment">%   along this path.</span>
+        [rows, ~] = size(Choicemismatchinfo);
+        maxmismatch = max(Choicemismatchinfo);
+        <span class="comment">%The potential choice with the fewest matches to already specified</span>
+        <span class="comment">%overhangs.</span>
+        Loc = 1;
+
+        <span class="keyword">for</span> i = 1:rows <span class="comment">%Consolidate potential choices based on max mismatch #.</span>
+            <span class="keyword">if</span> Choicemismatchinfo(i) &gt;= maxmismatch-2
+                <span class="comment">%Consolidate based on proximity to overhang with the</span>
+                <span class="comment">%highest degree oif mismatch.</span>
+                Consolpotentialchoice(Loc,1:Overhangsize) = Potentialchoice(i,:);   <span class="comment">%Overhang.</span>
+                Consolchoiceinfo(Loc,1) = Choiceinfo(i);                 <span class="comment">%Location index.</span>
+                Consolchoicemismatchinfo(Loc,1) = Choicemismatchinfo(i); <span class="comment">%Mismatch info.</span>
+                Loc = Loc+1;
+
+            <span class="keyword">else</span>
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+
+        <span class="comment">%Choose from the consolidated choices the one which is closest to</span>
+        <span class="comment">%the center of the repeat region.</span>
+        Degreeofmid = abs([(Consolchoiceinfo - Choiceinfomid1) <span class="keyword">...</span>
+            (Consolchoiceinfo - Choiceinfomid2)]);
+        [value, loc] = min([Degreeofmid ;[1000 1000]]); <span class="comment">%Choose value which is closest to the middle by row.</span>
+        [value2, loc2] = min(min([Degreeofmid ; [1000 1000]])); <span class="comment">%Value closest to the middle by column.</span>
+
+        <span class="comment">%Store choice, add to specified overhangs, repeat.</span>
+        Choicestorage(Progress+1,1:Overhangsize) = Consolpotentialchoice(loc(loc2),:); <span class="comment">%Store overhang choices.</span>
+        Choiceinfostorage(Progress+1,1) = Consolchoiceinfo(loc(loc2),1);               <span class="comment">%Store overhang choice locations.</span>
+        Choicemismatchstorage(Progress+1,1) = Consolchoicemismatchinfo(loc(loc2),1);   <span class="comment">%Store degree of mismatch for choices.</span>
+        Compilspecoverhangs = [Compilspecoverhangs ; Choicestorage(Progress+1,:) ; <span class="keyword">...</span><span class="comment"> %Add choices to compiled specified overhangs.</span>
+            InvertNucs(Choicestorage(Progress+1,:))];
+        Compilspecoverhanginfo = [Compilspecoverhanginfo ; Choiceinfostorage(Progress+1,1) <span class="keyword">...</span><span class="comment"> %Add overhang choice location info to compiled.</span>
+            ; (2*Repeatlength - Choiceinfostorage(Progress+1,1) - 2)];
+
+        [rows, ~] = size(Compilspecoverhangs);
+        Compilnumspecoverhangs = rows;
+        Progress = Progress+1;
+
+    <span class="keyword">else</span>                        <span class="comment">%What to do if we found no solution.</span>
+        <span class="keyword">if</span> Progress ~= 0        <span class="comment">%If this is not our first choice.</span>
+            badchoice = true;   <span class="comment">%Set badchoice to true -&gt; next while loop resets everything.</span>
+
+            <span class="keyword">if</span> badchoicecount == 1 <span class="comment">%If this is the first badchoice we've made.</span>
+                badchoicestorage(1:Progress,1:Overhangsize) = Choicestorage(:,:);
+
+            <span class="keyword">else</span> <span class="comment">%If this is not the first badchoice we've made, tack onto the end.</span>
+                badchoicestorage(1:Progress,end+1:end+Overhangsize) = Choicestorage(:,:);
+                <span class="comment">%Store the path to ensure we don't take it again.</span>
+
+            <span class="keyword">end</span>
+            badchoicedetails(1,badchoicecount) = Progress;
+            badchoicecount = badchoicecount+1;
+
+        <span class="keyword">else</span>
+            <span class="comment">%Handles case where we run out of options for choice 1 and must</span>
+            <span class="comment">%terminate without returning a solution.</span>
+            Failed = 1;
+            <span class="keyword">break</span>
+
+        <span class="keyword">end</span>
+
+    <span class="keyword">end</span>
+
+<span class="keyword">end</span>
+</pre><h2>Display Overhang Selection<a name="9"></a></h2><pre class="codeinput"><span class="keyword">if</span> Failed == 1          <span class="comment">%If we reached no solution</span>
+    fprintf(<span class="string">'\nA solution could not be determined with the parameters given\n'</span>);
+    <span class="keyword">return</span>
+
+<span class="keyword">else</span>                    <span class="comment">%If we reached a solution</span>
+    fprintf(<span class="string">'\nSpecified overhangs: %d\n'</span>,length(Compilspecoverhangs));
+    disp(Compilspecoverhangs)
+    fprintf(<span class="string">'\nOverhang choices: %d\n'</span>, length(Choicestorage));
+    disp(char(Choicestorage));
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">
+Specified overhangs: 18
+TCTA
+ATTT
+AGAT
+TAAA
+ATGA
+TACT
+GATG
+CTAC
+TGTT
+ACAA
+CTGT
+GACA
+TGAC
+ACTG
+GTAG
+CATC
+AAAG
+TTTC
+
+Overhang choices: 7
+ATGA
+GATG
+TGTT
+CTGT
+TGAC
+GTAG
+AAAG
+</pre><h2>Perform Comparisons Between all Overhang Choices and Create Match Index<a name="10"></a></h2><pre class="codeinput">[rows, ~] = size(Choicestorage);
+
+Comparisonstorage = zeros(rows,4*rows);
+Matchindexstorage = zeros(rows,rows);
+Loc = 1;
+
+<span class="keyword">for</span> i = 1:rows <span class="comment">%Building rows of Comparison matrix</span>
+    Comparisontarget = Choicestorage(i,1:Overhangsize);
+
+    <span class="keyword">for</span> j = Loc:rows <span class="comment">%Building columns of Comparison matrix</span>
+        Compareresult = Comparisontarget == Choicestorage(j,1:Overhangsize);
+        Matchindexstorage(j,i) = sum(Compareresult);
+
+    <span class="keyword">end</span>
+
+    Loc = Loc+1;
+<span class="keyword">end</span>
+
+<span class="comment">% f = figure('units','normalized','position',[.05 0.05 0.9 0.8]);</span>
+<span class="comment">% t = uitable(f, 'Data', Matchindexstorage, 'ColumnName', Choicestorage, 'RowName', Choicestorage, 'Position', [20 20 1800 680]);</span>
+
+fprintf(<span class="string">'\nMatrix of overhang match indices (0 -&gt; perfect mismatch; 4 -&gt; perfect match):\n'</span>);
+disp(Matchindexstorage);
+</pre><pre class="codeoutput">
+Matrix of overhang match indices (0 -&gt; perfect mismatch; 4 -&gt; perfect match):
+     4     0     0     0     0     0     0
+     0     4     0     0     0     0     0
+     0     1     4     0     0     0     0
+     2     0     1     4     0     0     0
+     0     0     2     0     4     0     0
+     1     2     0     1     1     4     0
+     1     2     0     0     1     2     4
+
+</pre><h2>Make Choices about the Order of Overhangs in the Final Assembly<a name="11"></a></h2><pre class="codeinput">clearvars <span class="string">-except</span> <span class="string">Choicestorage</span> <span class="string">Choiceinfostorage</span> <span class="string">Backboneoverhangs</span> <span class="string">Repeatstring</span> <span class="keyword">...</span>
+    <span class="string">Repeatstringrev</span> <span class="string">Overhangsize</span> <span class="string">Spacernum</span> <span class="string">Repeatlength</span> <span class="string">Matchindexstorage</span> <span class="keyword">...</span>
+    <span class="string">Compilspecoverhangs</span> <span class="string">Overhangstorage</span> <span class="string">Backboneoverhanginfo</span> <span class="string">Spacerlength</span> <span class="keyword">...</span>
+    <span class="string">Compilspecoverhanginfo</span> <span class="string">Overhangnum</span> <span class="string">Desiredseq_bin</span> <span class="string">Desiredenz_bin</span> <span class="keyword">...</span>
+    <span class="string">Desireddumseq_bin</span> <span class="string">Desiredseqs</span> <span class="string">Primeroverlap</span> <span class="string">Orderoligos</span> <span class="string">Dropoutseq</span> <span class="keyword">...</span>
+    <span class="string">Reversedropoutseq</span> <span class="string">Spacerseq</span> <span class="string">Spaceroptionseq</span> <span class="string">Desiredspacerorder_bin</span> <span class="keyword">...</span>
+    <span class="string">Spaceroptioncount</span> <span class="string">Enzseq</span> <span class="string">Prefix</span>
+<span class="comment">%Clear all of the temporary junk.</span>
+
+[rowsspecoverhangs, ~] = size(Compilspecoverhangs);
+Potentialsegmentlength = zeros(rowsspecoverhangs,1);
+Progress = 0;
+Overhangorder = char(zeros(1,Overhangsize));
+Overhanglocation = 0;
+Segmentlength = 0;
+
+<span class="keyword">while</span> Progress &lt; Overhangnum - 4
+
+    Potentialsegmentlength = zeros(rowsspecoverhangs,1);
+
+    <span class="keyword">for</span> i = 5:rowsspecoverhangs
+        <span class="keyword">if</span> any(Overhanglocation == Compilspecoverhanginfo(i))
+            <span class="comment">%Test whether we have used this overhang before. If yes, do not</span>
+            <span class="comment">%consider it and move on to the next overhang choice.</span>
+
+        <span class="keyword">else</span>
+            <span class="keyword">if</span> Progress == 0 <span class="comment">%We are on the first spacer</span>
+                <span class="keyword">if</span> Compilspecoverhanginfo(i) &gt; Repeatlength
+                    <span class="comment">%We are on the reverse string going 3'-&gt;5'</span>
+                    Potentialsegmentlength(i) = 4 + Spacerlength + <span class="keyword">...</span>
+                        2*Repeatlength - Compilspecoverhanginfo(i) + 1;
+
+                <span class="keyword">else</span>    <span class="comment">%We are on the forward string going 5'-&gt;3'</span>
+                    Potentialsegmentlength(i) = 0;
+                    <span class="comment">%Set in excess; can't use a 5'-&gt;3' overhang for this</span>
+                    <span class="comment">%choice.</span>
+
+                <span class="keyword">end</span>
+
+            <span class="keyword">elseif</span> Progress &gt; 0 &amp;&amp; Progress &lt; Overhangnum - 6  <span class="comment">%We are on a middle spacer</span>
+                <span class="keyword">if</span> Compilspecoverhanginfo(i) &gt; Repeatlength <span class="keyword">...</span>
+                        <span class="comment">%We are on the reverse string going 3'-&gt;5'</span>
+                    Potentialsegmentlength(i) = Repeatlength - Overhanglocation(Progress+1) <span class="keyword">...</span>
+                        + 1 + Spacerlength + 2*Repeatlength - Compilspecoverhanginfo(i) + 1;
+
+                <span class="keyword">else</span>    <span class="comment">%We are on the forward string going 5'-&gt;3'</span>
+                    Potentialsegmentlength(i) = 0;
+
+                <span class="keyword">end</span>
+
+            <span class="keyword">else</span> <span class="comment">%We are on the final spacer.</span>
+                <span class="keyword">if</span> Compilspecoverhanginfo(i) &gt; Repeatlength <span class="keyword">...</span>
+                        <span class="comment">%We are on the reverse string going 3'-&gt;5'</span>
+                    Potentialsegmentlength(i) = Repeatlength - Overhanglocation(Progress+1) <span class="keyword">...</span>
+                        + 1 + Spacerlength + 5;
+
+                <span class="keyword">else</span>    <span class="comment">%We are on the forward string going 5'-&gt;3'</span>
+                    Potentialsegmentlength(i) = 0;
+
+                <span class="keyword">end</span>
+
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+
+    <span class="keyword">end</span>
+
+    <span class="comment">%Select the choice which results in the segment length closest to but</span>
+    <span class="comment">%under 60bp.</span>
+    [maxlength,maxloc] = max(Potentialsegmentlength);
+
+    <span class="keyword">if</span> maxlength &gt; 60
+        <span class="keyword">if</span> any((0 &lt; Potentialsegmentlength).*(Potentialsegmentlength &lt; 60))
+            <span class="comment">%Check if there are any nonzero segment lengths less than 60.</span>
+            <span class="keyword">for</span> i = 1:length(Potentialsegmentlength)
+                <span class="keyword">if</span> Potentialsegmentlength(i) &gt;= 60 <span class="comment">%Replace above 60 with 0</span>
+                    Potentialsegmentlength(i) = 0;
+                <span class="keyword">else</span>
+                <span class="keyword">end</span>
+
+            <span class="keyword">end</span>
+
+            <span class="comment">%Choose the segment which is closest to but less than 60.</span>
+            [minlength, minloc] = min(60 - Potentialsegmentlength);
+            Overhangorder = [Overhangorder ; Compilspecoverhangs(minloc,:) ; <span class="keyword">...</span>
+                InvertNucs(Compilspecoverhangs(minloc,:))];
+
+            Overhanglocation = [Overhanglocation ; Compilspecoverhanginfo(minloc,:) ; <span class="keyword">...</span>
+                Loc2ComplementLoc(Compilspecoverhanginfo, Compilspecoverhanginfo(minloc,:), Repeatlength)];
+
+            Segmentlength = [Segmentlength ; Potentialsegmentlength(minloc)];
+
+        <span class="keyword">else</span>
+            <span class="comment">%If the max length is greater than 60 and there are no</span>
+            <span class="comment">%potential segments available that are less than 60, choose the</span>
+            <span class="comment">%largest length segment available (going to have to PCR it).</span>
+            Overhangorder = [Overhangorder ; Compilspecoverhangs(maxloc,:) ; <span class="keyword">...</span>
+                InvertNucs(Compilspecoverhangs(maxloc,:))];
+
+            Overhanglocation = [Overhanglocation ; Compilspecoverhanginfo(maxloc) ; <span class="keyword">...</span>
+                Loc2ComplementLoc(Compilspecoverhanginfo, Compilspecoverhanginfo(maxloc), Repeatlength)];
+
+            Segmentlength = [Segmentlength ; Potentialsegmentlength(maxloc)];
+
+        <span class="keyword">end</span>
+
+    <span class="keyword">else</span>
+        <span class="comment">%If maxlength is less than or equal to 60, Illumina seq. will work</span>
+        <span class="comment">%with high fidelity. Use the overhang choice resulting in a seq.</span>
+        <span class="comment">%length closest to 60bp.</span>
+        Overhangorder = [Overhangorder ; Compilspecoverhangs(maxloc,:) ; <span class="keyword">...</span>
+            InvertNucs(Compilspecoverhangs(maxloc,:))];
+
+        Overhanglocation = [Overhanglocation ; Compilspecoverhanginfo(maxloc) ; <span class="keyword">...</span>
+            Loc2ComplementLoc(Compilspecoverhanginfo, Compilspecoverhanginfo(maxloc), Repeatlength)];
+
+        Segmentlength = [Segmentlength ; Potentialsegmentlength(maxloc)];
+
+    <span class="keyword">end</span>
+
+    Progress = Progress + 2;
+
+<span class="keyword">end</span>
+
+Overhangorder = [Compilspecoverhangs(3,:); Overhangorder(2:end,:) ; Compilspecoverhangs(4,:)]; <span class="comment">%Trim storage matrices of initial 0's</span>
+Overhanglocation = [Compilspecoverhanginfo(3) ; Overhanglocation(2:end,:) ; Compilspecoverhanginfo(4)];
+Segmentlength = Segmentlength(2:end,1);
+</pre><h2>Print the Assembly with Instructions<a name="12"></a></h2><pre class="codeinput">Repeatstringrev = fliplr(Repeatstringrev);
+Enzseqlength = length(Enzseq);
+Reverseenzseq = [fliplr(Enzseq(1,4:end)) <span class="string">'-5'''</span>];
+
+Colorvec = {<span class="string">'[0.96 0.24 0.02]'</span> <span class="string">'[0.98 0.71 0.08]'</span> <span class="string">'[0.35 0.91 0.07]'</span> <span class="keyword">...</span>
+    <span class="string">'[0.08 0.38 0.1]'</span> <span class="string">'[0.07 0.58 0.88]'</span> <span class="string">'[0.09 0.41 0.4]'</span>  <span class="keyword">...</span>
+    <span class="string">'[0.09 0.09 0.87]'</span> <span class="string">'[0.36 0.1 0.89]'</span> <span class="string">'[0.68 0.13 0.87]'</span> <span class="string">'[0.97 0.22 0.56]'</span><span class="keyword">...</span>
+    <span class="string">'[0.5 1 1]'</span> <span class="string">'[0.25 0 0]'</span> <span class="string">'[0.5 0 0.5]'</span> <span class="string">'[0.25 0.5 0.5]'</span> <span class="keyword">...</span>
+    <span class="string">'[0.55 0.58 0.14]'</span> <span class="string">'[1 0.5 0.5]'</span>};
+<span class="comment">%Vector with various color options.</span>
+Colorveccounter = 1; <span class="comment">%Counter for cycling through Colorvec.</span>
+
+<span class="keyword">for</span> i = 1:length(Overhanglocation)
+    <span class="keyword">if</span> Overhanglocation(i) &gt; Repeatlength
+        Overhanglocation(i) = Loc2ComplementLoc(Compilspecoverhanginfo, <span class="keyword">...</span>
+            Overhanglocation(i), Repeatlength);
+    <span class="keyword">else</span>
+    <span class="keyword">end</span>
+
+<span class="keyword">end</span>
+
+<span class="comment">%Print the starting form of the DNA</span>
+fprintf(<span class="string">'\nDNA Prior to any cutting:\n'</span>);
+cprintf(<span class="string">'Text'</span>, Repeatstring);
+cprintf(<span class="string">'Strings'</span>,Dropoutseq);
+cprintf(<span class="string">'Text'</span>, Repeatstring);
+fprintf(<span class="string">'\n'</span>);
+
+cprintf(<span class="string">'Text'</span>, Repeatstringrev);
+cprintf(<span class="string">'Strings'</span>, Reversedropoutseq);
+cprintf(<span class="string">'Text'</span>, Repeatstringrev);
+
+<span class="comment">%Print the DNA after cutting out the dropout</span>
+fprintf(<span class="string">'\n\nDNA backbone after cutting out the dropout:\n'</span>);
+cprintf(<span class="string">'Text'</span>, [Repeatstring(1:Repeatlength-Overhangsize) char(zeros(1, Overhangsize))]);
+cprintf(<span class="string">'Text'</span>, char(zeros(1,Spacerlength+1)));
+cprintf(Colorvec{1+Spacernum}, [Repeatstring(2:2+Overhangsize-1) <span class="string">' '</span>]); fprintf(<span class="string">'\b'</span>);
+cprintf(<span class="string">'Text'</span>, Repeatstring(2+Overhangsize-1:Repeatlength));
+
+fprintf(<span class="string">'\n'</span>);
+cprintf(<span class="string">'Text'</span>, Repeatstringrev(1:Repeatlength-Overhangsize));
+cprintf(Colorvec{1}, [Repeatstringrev(Repeatlength-Overhangsize+1:Repeatlength) <span class="string">' '</span>]); fprintf(<span class="string">'\b'</span>);
+cprintf(<span class="string">'Text'</span>, char(zeros(1,Spacerlength+Overhangsize+1)));
+cprintf(<span class="string">'Text'</span>, Repeatstringrev(Overhangsize+1:Repeatlength));
+fprintf(<span class="string">'\n\n'</span>);
+
+cprintf(<span class="string">'Text'</span>, <span class="string">'%s'</span>, char(8722*ones(1,2*Repeatlength+Spacerlength)));
+fprintf(<span class="string">'\n'</span>);
+
+<span class="comment">% Initialize parameters for printing out each successive spacer procedure.</span>
+Progress = 0;
+Seqnum = 0;
+Loc = 1;
+Storagecounter = 1;
+Oligolengthstorage = zeros(Spacernum*2,1);
+
+<span class="keyword">if</span> Desiredseq_bin == 1
+    Spaceroption = <span class="string">'%s'</span>;
+<span class="keyword">else</span>
+    Spaceroption = <span class="string">'%d'</span>;
+<span class="keyword">end</span>
+
+<span class="keyword">while</span> Progress &lt; Spacernum
+    fprintf(<span class="string">'Procedure for Spacer:  %d\n'</span>,Progress+1);
+    Pushforward = false;
+    Degreeofpush1 = 0;
+
+    <span class="keyword">if</span> Desiredseq_bin == 1
+        Spacerseqcurrent = Spacerseq(Progress+1,:);
+
+    <span class="keyword">else</span>
+        Spacerseqcurrent = (Seqnum+1)*ones(1,Spacerlength);
+
+    <span class="keyword">end</span>
+
+    <span class="comment">%Primer overlap</span>
+    <span class="keyword">if</span> Overhanglocation(Loc) &gt; Enzseqlength+1
+        cprintf(<span class="string">'Text'</span>, char(zeros(1,Overhanglocation(Loc)-14-1)));
+        cprintf(<span class="string">'[1,0,0]'</span>, Enzseq);
+        fprintf(<span class="string">'\n'</span>);
+
+    <span class="keyword">else</span>
+        Pushforward = true;
+        <span class="keyword">if</span> Overhanglocation(Loc) - (Enzseqlength-1) &gt; 0
+            Degreeofpush1 = abs(Overhanglocation(Loc)-(Enzseqlength+1))+1;
+            Degreeofpush2 = abs(Overhanglocation(Loc)-(Enzseqlength+1))+1;
+        <span class="keyword">else</span>
+            Degreeofpush1 = abs(Overhanglocation(Loc)-(Enzseqlength+1))+1;
+            Degreeofpush2 = 3;
+        <span class="keyword">end</span>
+        cprintf(<span class="string">'[1,0,0]'</span>, Enzseq);
+        fprintf(<span class="string">'\n'</span>);
+    <span class="keyword">end</span>
+
+    <span class="comment">%Forward string</span>
+    <span class="keyword">if</span> Pushforward == true
+        cprintf(<span class="string">'Text'</span>, char(zeros(1,Degreeofpush1)));
+    <span class="keyword">else</span>
+    <span class="keyword">end</span>
+
+    <span class="keyword">if</span> Orderoligos == 1 <span class="comment">%Store oligos for printing later</span>
+        Vec2store = [Repeatstring(Overhanglocation(Loc): <span class="keyword">...</span>
+            Overhanglocation(Loc)+Overhangsize-1) <span class="keyword">...</span>
+            Repeatstring(Overhanglocation(Loc)+Overhangsize:Repeatlength) <span class="keyword">...</span>
+            num2str(Spacerseqcurrent,<span class="string">'%u'</span>) Repeatstring(1:Overhanglocation(Loc+1)-1)];
+        Oligostorage(Storagecounter,1:length(Vec2store)) = Vec2store;
+        Oligolengthstorage(Storagecounter) = length(Vec2store);
+        Oligospacerstorage(Storagecounter) = length(Repeatstring(Overhanglocation(Loc):<span class="keyword">...</span>
+            Overhanglocation(Loc)+Overhangsize-1)) + <span class="keyword">...</span>
+            length(Repeatstring(Overhanglocation(Loc)+Overhangsize:Repeatlength)) + 1;
+        Storagecounter = Storagecounter+1;
+
+    <span class="keyword">else</span> <span class="comment">%Store primers for printing later</span>
+        Vec2store = [Enzseq <span class="keyword">...</span>
+            Repeatstring(Overhanglocation(Loc)-1:Repeatlength)<span class="keyword">...</span>
+            num2str(Spacerseqcurrent(1,1:Primeroverlap),<span class="string">'%u'</span>)];
+        Primerstorage(Storagecounter,1:length(Vec2store)) = Vec2store;
+        Primerspacerstorage(Storagecounter) = Enzseqlength + <span class="keyword">...</span>
+            length(Repeatstring(Overhanglocation(Loc)-1:Repeatlength)) + 1;
+        Storagecounter = Storagecounter+1;
+
+    <span class="keyword">end</span>
+
+    cprintf(<span class="string">'Text'</span>, Repeatstring(1:Overhanglocation(Loc)-2));
+    cprintf(<span class="string">'[1,0,0]'</span>, Repeatstring(Overhanglocation(Loc)-1:Repeatlength));
+
+    cprintf(<span class="string">'[1,0,0]'</span>, Spaceroption, Spacerseqcurrent(1,1:Primeroverlap));
+    cprintf(<span class="string">'Strings'</span>, Spaceroption, Spacerseqcurrent(1,Primeroverlap+1:Spacerlength));
+
+    cprintf(<span class="string">'Text'</span>, Repeatstring);
+    fprintf(<span class="string">'\n'</span>);
+    Loc = Loc+1;
+
+    <span class="comment">%Reverse string</span>
+    <span class="keyword">if</span> Pushforward == true
+        cprintf(<span class="string">'Text'</span>, char(zeros(1,Degreeofpush1)));
+    <span class="keyword">else</span>
+    <span class="keyword">end</span>
+
+    <span class="keyword">if</span> Orderoligos == 1 <span class="comment">%Store the oligos for printing later</span>
+        Vec2store = [Repeatstringrev(Overhanglocation(Loc-1)+Overhangsize:Repeatlength) <span class="keyword">...</span>
+            num2str(InvertNucs(Spacerseqcurrent),<span class="string">'%u'</span>) Repeatstringrev(1:Overhanglocation(Loc)-1) <span class="keyword">...</span>
+            Repeatstringrev(Overhanglocation(Loc): <span class="keyword">...</span>
+            Overhanglocation(Loc)+Overhangsize-1)];
+        Oligostorage(Storagecounter,1:length(Vec2store)) = Vec2store;
+        Oligolengthstorage(Storagecounter) = length(Vec2store);
+        Oligospacerstorage(Storagecounter) = length(Repeatstringrev(Overhanglocation(Loc-1) <span class="keyword">...</span>
+            +Overhangsize:Repeatlength)) + 1;
+        Storagecounter = Storagecounter+1;
+
+    <span class="keyword">else</span> <span class="comment">%Store the Primers for printing later</span>
+        Vec2store = [num2str(InvertNucs(Spacerseqcurrent(1,end-Primeroverlap+1:end)),<span class="string">'%u'</span>) Repeatstringrev(1:Overhanglocation(Loc)+Overhangsize) <span class="keyword">...</span>
+            Reverseenzseq(1:end-3) <span class="string">'-''5'</span>];
+
+        Primerstorage(Storagecounter,1:length(Vec2store)) = fliplr(Vec2store);
+        Primerspacerstorage(Storagecounter) = length(Reverseenzseq) + <span class="keyword">...</span>
+            length(Repeatstringrev(1:Overhanglocation(Loc)+Overhangsize)) + 1;
+        Storagecounter = Storagecounter+1;
+
+    <span class="keyword">end</span>
+
+    cprintf(<span class="string">'Text'</span>, Repeatstringrev);
+
+    cprintf(<span class="string">'Strings'</span>, Spaceroption, InvertNucs(Spacerseqcurrent(1,1:Spacerlength-Primeroverlap)));
+    cprintf(<span class="string">'[1,0,0]'</span>, Spaceroption, InvertNucs(Spacerseqcurrent(1,Spacerlength-Primeroverlap+1:Spacerlength)));
+
+    cprintf(<span class="string">'[1,0,0]'</span>, Repeatstringrev(1:Overhanglocation(Loc)+Overhangsize));
+    cprintf(<span class="string">'Text'</span>, Repeatstringrev(Overhanglocation(Loc)+Overhangsize+1:Repeatlength));
+    fprintf(<span class="string">'\n'</span>);
+
+    <span class="comment">%Reverse primer</span>
+    <span class="keyword">if</span> Pushforward == true
+        cprintf(<span class="string">'Text'</span>, char(zeros(1,Degreeofpush1+Repeatlength+Spacerlength+<span class="keyword">...</span>
+            Overhanglocation(Loc)+Overhangsize)));
+    <span class="keyword">else</span>
+        cprintf(<span class="string">'Text'</span>, char(zeros(1,Repeatlength+Spacerlength+<span class="keyword">...</span>
+            Overhanglocation(Loc)+Overhangsize)));
+    <span class="keyword">end</span>
+    cprintf(<span class="string">'[1,0,0]'</span>, Reverseenzseq);
+    fprintf(<span class="string">'\n\n'</span>);
+
+    Loc = Loc-1;
+
+    <span class="comment">%PCR Product Forward string</span>
+    <span class="keyword">if</span> Pushforward == true
+        cprintf(<span class="string">'Text'</span>, char(zeros(1,Degreeofpush2)));
+    <span class="keyword">else</span>
+    <span class="keyword">end</span>
+    cprintf(<span class="string">'Text'</span>, <span class="string">'%s'</span>, char(zeros(1,Overhanglocation(Loc)-(Enzseqlength-1))));
+    cprintf(<span class="string">'Text'</span>,<span class="string">'GGCC'</span>);
+    cprintf(<span class="string">'[1,0,0]'</span>,<span class="string">'GGTCTC'</span>);
+    cprintf(<span class="string">'Text'</span>, Repeatstring(Overhanglocation(Loc)-1:Repeatlength));
+    cprintf(<span class="string">'Strings'</span>, Spaceroption, Spacerseqcurrent);
+    cprintf(<span class="string">'Text'</span>, Repeatstring(1:Overhanglocation(Loc+1)+Overhangsize));
+    cprintf(<span class="string">'Text'</span>, <span class="string">'GAGACCGGCC'</span>);
+    fprintf(<span class="string">'\n'</span>);
+    Loc = Loc+1;
+
+    <span class="comment">%PCR product reverse string</span>
+    <span class="keyword">if</span> Pushforward == true
+        cprintf(<span class="string">'Text'</span>, char(zeros(1,Degreeofpush2)));
+    <span class="keyword">else</span>
+    <span class="keyword">end</span>
+    cprintf(<span class="string">'Text'</span>, <span class="string">'%s'</span>, char(zeros(1,Overhanglocation(Loc-1)-(Enzseqlength-1))));
+    cprintf(<span class="string">'Text'</span>, <span class="string">'CCGGCCAGAG'</span>);
+    cprintf(<span class="string">'Text'</span>, Repeatstringrev(Overhanglocation(Loc-1)-1:Repeatlength));
+    cprintf(<span class="string">'Strings'</span>, Spaceroption, InvertNucs(Spacerseqcurrent));
+    cprintf(<span class="string">'Text'</span>, Repeatstringrev(1:Overhanglocation(Loc)+Overhangsize));
+    cprintf(<span class="string">'[1,0,0]'</span>, <span class="string">'CTCTGG'</span>);
+    cprintf(<span class="string">'Text'</span>, <span class="string">'CCGG'</span>);
+    fprintf(<span class="string">'\n\n'</span>);
+    Loc = Loc-1;
+
+    <span class="comment">%Enzyme-digested forward string</span>
+    <span class="keyword">if</span> Pushforward == true
+        cprintf(<span class="string">'Text'</span>, <span class="string">'%s'</span>, char(zeros(1,Degreeofpush1+Overhanglocation(Loc)-1)));
+    <span class="keyword">else</span>
+        cprintf(<span class="string">'Text'</span>, <span class="string">'%s'</span>, char(zeros(1,Overhanglocation(Loc)-1)));
+    <span class="keyword">end</span>
+    cprintf(Colorvec{Colorveccounter}, [Repeatstring(Overhanglocation(Loc): <span class="keyword">...</span>
+        Overhanglocation(Loc)+Overhangsize-1) <span class="string">' '</span>]); fprintf(<span class="string">'\b'</span>);
+    cprintf(<span class="string">'Text'</span>, Repeatstring(Overhanglocation(Loc)+Overhangsize:Repeatlength));
+    cprintf(<span class="string">'Strings'</span>, Spaceroption, Spacerseqcurrent);
+    cprintf(<span class="string">'Text'</span>, [Repeatstring(1:Overhanglocation(Loc+1)-1) <span class="string">' '</span>]); fprintf(<span class="string">'\b'</span>);
+    fprintf(<span class="string">'\n'</span>);
+    Colorveccounter = Colorveccounter+1;
+    Loc = Loc+1;
+
+    <span class="comment">%Enzyme-digested reverse string</span>
+    <span class="keyword">if</span> Pushforward == true
+        cprintf(<span class="string">'Text'</span>, <span class="string">'%s'</span>, char(zeros(1,Degreeofpush1+Overhanglocation(Loc-1)+Overhangsize-1)));
+    <span class="keyword">else</span>
+        cprintf(<span class="string">'Text'</span>, <span class="string">'%s'</span>, char(zeros(1,Overhanglocation(Loc-1)+Overhangsize-1)));
+    <span class="keyword">end</span>
+    cprintf(<span class="string">'Text'</span>, Repeatstringrev(Overhanglocation(Loc-1)+Overhangsize:Repeatlength));
+    cprintf(<span class="string">'Strings'</span>, Spaceroption, InvertNucs(Spacerseqcurrent));
+    cprintf(<span class="string">'Text'</span>, [Repeatstringrev(1:Overhanglocation(Loc)-1) <span class="string">' '</span>]); fprintf(<span class="string">'\b'</span>);
+    cprintf(Colorvec{Colorveccounter}, [Repeatstringrev(Overhanglocation(Loc): <span class="keyword">...</span>
+        Overhanglocation(Loc)+Overhangsize-1) <span class="string">' '</span>]); fprintf(<span class="string">'\b'</span>);
+    fprintf(<span class="string">'\n\n'</span>);
+    Loc = Loc+1;
+
+    <span class="comment">%Add lines</span>
+    Sequencesize = Overhanglocation(Loc-1)+Spacerlength+Repeatlength-Overhanglocation(Loc-2);
+    fprintf(<span class="string">'Sequence size:  %d\n'</span>, Sequencesize);
+
+    cprintf(<span class="string">'Text'</span>, <span class="string">'%s'</span>, char(8722*ones(1,2*Repeatlength+Spacerlength)));
+    fprintf(<span class="string">'\n'</span>);
+
+    Seqnum = Seqnum + 1;
+
+    <span class="keyword">if</span> Seqnum &gt;= 9
+        Seqnum = -1;
+    <span class="keyword">else</span>
+    <span class="keyword">end</span>
+
+    Progress = Progress + 1;
+
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">
+DNA Prior to any cutting:
+AATTTCTACTGTTGTAGATDDDDDDDDDDDDDDDDDDDDDDDAATTTCTACTGTTGTAGAT
+TTAAAGATGACAACATCTADDDDDDDDDDDDDDDDDDDDDDDTTAAAGATGACAACATCTA
+
+DNA backbone after cutting out the dropout:
+AATTTCTACTGTTGT                            ATTTTCTACTGTTGTAGAT
+TTAAAGATGACAACATCTA                            AGATGACAACATCTA
+
+&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;
+Procedure for Spacer:  1
+ 5'-CCGGCCAGAG
+AATTTCTACTGTTGTAGAT11111111111111111111111AATTTCTACTGTTGTAGAT
+TTAAAGATGACAACATCTA11111111111111111111111TTAAAGATGACAACATCTA
+                                                            GAGACCGGCC-5'
+
+    GGCCGGTCTCTAGAT11111111111111111111111AATTTCTACTGTTGTAGAGAGACCGGCC
+    CCGGCCAGAGATCTA11111111111111111111111TTAAAGATGACAACATCTCTCTGGCCGG
+
+               AGAT11111111111111111111111AATTTCTACTGTT
+                   11111111111111111111111TTAAAGATGACAACATC
+
+Sequence size:  40
+&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;
+Procedure for Spacer:  2
+5'-CCGGCCAGAG
+ AATTTCTACTGTTGTAGAT22222222222222222222222AATTTCTACTGTTGTAGAT
+ TTAAAGATGACAACATCTA22222222222222222222222TTAAAGATGACAACATCTA
+                                                         GAGACCGGCC-5'
+
+   GGCCGGTCTCTGTAGAT22222222222222222222222AATTTCTACTGTTGGAGACCGGCC
+   CCGGCCAGAGACATCTA22222222222222222222222TTAAAGATGACAACCTCTGGCCGG
+
+              GTAGAT22222222222222222222222AATTTCTAC
+                  TA22222222222222222222222TTAAAGATGACAA
+
+Sequence size:  38
+&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;
+Procedure for Spacer:  3
+5'-CCGGCCAGAG
+     AATTTCTACTGTTGTAGAT33333333333333333333333AATTTCTACTGTTGTAGAT
+     TTAAAGATGACAACATCTA33333333333333333333333TTAAAGATGACAACATCTA
+                                                            GAGACCGGCC-5'
+
+   GGCCGGTCTCCTGTTGTAGAT33333333333333333333333AATTTCTACTGTTGAGACCGGCC
+   CCGGCCAGAGGACAACATCTA33333333333333333333333TTAAAGATGACAACTCTGGCCGG
+
+              TGTTGTAGAT33333333333333333333333AATTTCTA
+                  CATCTA33333333333333333333333TTAAAGATGACA
+
+Sequence size:  41
+&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;
+Procedure for Spacer:  4
+5'-CCGGCCAGAG
+      AATTTCTACTGTTGTAGAT44444444444444444444444AATTTCTACTGTTGTAGAT
+      TTAAAGATGACAACATCTA44444444444444444444444TTAAAGATGACAACATCTA
+                                                            GAGACCGGCC-5'
+
+   GGCCGGTCTCACTGTTGTAGAT44444444444444444444444AATTTCTACTGTGAGACCGGCC
+   CCGGCCAGAGTGACAACATCTA44444444444444444444444TTAAAGATGACACTCTGGCCGG
+
+              CTGTTGTAGAT44444444444444444444444AATTTCT
+                  ACATCTA44444444444444444444444TTAAAGATGAC
+
+Sequence size:  41
+&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;
+Procedure for Spacer:  5
+5'-CCGGCCAGAG
+       AATTTCTACTGTTGTAGAT55555555555555555555555AATTTCTACTGTTGTAGAT
+       TTAAAGATGACAACATCTA55555555555555555555555TTAAAGATGACAACATCTA
+                                                            GAGACCGGCC-5'
+
+   GGCCGGTCTCTACTGTTGTAGAT55555555555555555555555AATTTCTACTGGAGACCGGCC
+   CCGGCCAGAGATGACAACATCTA55555555555555555555555TTAAAGATGACCTCTGGCCGG
+
+              ACTGTTGTAGAT55555555555555555555555AATTTC
+                  AACATCTA55555555555555555555555TTAAAGATGA
+
+Sequence size:  41
+&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;
+Procedure for Spacer:  6
+5'-CCGGCCAGAG
+        AATTTCTACTGTTGTAGAT66666666666666666666666AATTTCTACTGTTGTAGAT
+        TTAAAGATGACAACATCTA66666666666666666666666TTAAAGATGACAACATCTA
+                                                            GAGACCGGCC-5'
+
+   GGCCGGTCTCCTACTGTTGTAGAT66666666666666666666666AATTTCTACTGAGACCGGCC
+   CCGGCCAGAGGATGACAACATCTA66666666666666666666666TTAAAGATGACTCTGGCCGG
+
+              TACTGTTGTAGAT66666666666666666666666AATTT
+                  CAACATCTA66666666666666666666666TTAAAGATG
+
+Sequence size:  41
+&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;
+Procedure for Spacer:  7
+5'-CCGGCCAGAG
+         AATTTCTACTGTTGTAGAT77777777777777777777777AATTTCTACTGTTGTAGAT
+         TTAAAGATGACAACATCTA77777777777777777777777TTAAAGATGACAACATCTA
+                                                          GAGACCGGCC-5'
+
+   GGCCGGTCTCTCTACTGTTGTAGAT77777777777777777777777AATTTCTGAGACCGGCC
+   CCGGCCAGAGAGATGACAACATCTA77777777777777777777777TTAAAGACTCTGGCCGG
+
+              CTACTGTTGTAGAT77777777777777777777777AA
+                  ACAACATCTA77777777777777777777777TTAAAG
+
+Sequence size:  39
+&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;
+Procedure for Spacer:  8
+5'-CCGGCCAGAG
+            AATTTCTACTGTTGTAGAT88888888888888888888888AATTTCTACTGTTGTAGAT
+            TTAAAGATGACAACATCTA88888888888888888888888TTAAAGATGACAACATCTA
+                                                            GAGACCGGCC-5'
+
+   GGCCGGTCTCATTTCTACTGTTGTAGAT88888888888888888888888AATTTCGAGACCGGCC
+   CCGGCCAGAGTAAAGATGACAACATCTA88888888888888888888888TTAAAGCTCTGGCCGG
+
+              TTTCTACTGTTGTAGAT88888888888888888888888A
+                  ATGACAACATCTA88888888888888888888888TTAAA
+
+Sequence size:  41
+&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;
+</pre><h2>Display the Final Results<a name="13"></a></h2><pre class="codeinput"><span class="keyword">if</span> Orderoligos == 1 <span class="comment">%If the user wants to order oligos</span>
+    fprintf(<span class="string">'The oligos to order are:  \n'</span>);
+    [rows, ~] = size(Oligostorage);
+    Spacercount = 1;
+    Abovecutoff = false;
+
+    <span class="keyword">for</span> i = 1:rows
+        <span class="keyword">if</span> mod(i,2) == 0 <span class="comment">%If we are on an even number row</span>
+            fprintf(<span class="string">'Spacer %d, Reverse:  '</span>, floor(Spacercount));
+            cprintf(<span class="string">'Text'</span>, <span class="string">'%s'</span>, char(zeros(1,Overhangsize)));
+            cprintf(<span class="string">'Text'</span>, <span class="string">'%s'</span>, Oligostorage(i,1:Oligospacerstorage(i)-1));
+            cprintf(<span class="string">'Strings'</span>, <span class="string">'%s'</span>, [Oligostorage(i,Oligospacerstorage(i):Oligospacerstorage(i)+Spacerlength-1) <span class="string">' '</span>]); fprintf(<span class="string">'\b'</span>);
+            cprintf(<span class="string">'Text'</span>, <span class="string">'%s'</span>, [Oligostorage(i,Oligospacerstorage(i)+Spacerlength:Oligolengthstorage(i)-Overhangsize) <span class="string">' '</span>]); fprintf(<span class="string">'\b'</span>);
+            cprintf(<span class="string">'[0.98 0.71 0.08]'</span>, <span class="string">'%s'</span>, [Oligostorage(i,Oligolengthstorage(i)-Overhangsize+1:end) <span class="string">' '</span>]); fprintf(<span class="string">'\b'</span>);
+            <span class="keyword">if</span> Oligolengthstorage(i) &gt; 60
+                cprintf(<span class="string">'[1,0,0]'</span>, <span class="string">'%s'</span>, <span class="string">' *'</span>);
+                Abovecutoff = true;
+            <span class="keyword">else</span>
+            <span class="keyword">end</span>
+
+        <span class="keyword">else</span> <span class="comment">%If we are on an odd number row</span>
+            fprintf(<span class="string">'Spacer %d, Forward:  '</span>, floor(Spacercount));
+            cprintf(<span class="string">'[0.98 0.71 0.08]'</span>, <span class="string">'%s'</span>, [Oligostorage(i,1:Overhangsize) <span class="string">' '</span>]); fprintf(<span class="string">'\b'</span>);
+
+            <span class="keyword">if</span> Overhangsize+1 == Oligospacerstorage(i)
+            <span class="keyword">else</span>
+                cprintf(<span class="string">'Text'</span>, <span class="string">'%s'</span>, Oligostorage(i,Overhangsize+1:Oligospacerstorage(i)-1));
+
+            <span class="keyword">end</span>
+            cprintf(<span class="string">'Strings'</span>, <span class="string">'%s'</span>, [Oligostorage(i,Oligospacerstorage(i):Oligospacerstorage(i)+Spacerlength-1) <span class="string">' '</span>]); fprintf(<span class="string">'\b'</span>);
+
+            cprintf(<span class="string">'Text'</span>, <span class="string">'%s'</span>, [Oligostorage(i,Oligospacerstorage(i)+Spacerlength:end) <span class="string">' '</span>]); fprintf(<span class="string">'\b'</span>);
+            <span class="keyword">if</span> Oligolengthstorage(i) &gt; 60
+                cprintf(<span class="string">'[1,0,0]'</span>, <span class="string">'%s'</span>, [char(zeros(1,Overhangsize)) <span class="string">' *'</span>]);
+                Abovecutoff = true;
+            <span class="keyword">else</span>
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+
+        fprintf(<span class="string">'\n'</span>);
+        Spacercount = Spacercount+0.5;
+
+    <span class="keyword">end</span>
+
+    <span class="keyword">if</span> Abovecutoff == true;
+        cprintf(<span class="string">'[1,0,0]'</span>, <span class="string">'%s'</span>, <span class="string">'WARNING, * Indicates that the specified oligo is larger than 60 bp. Mutations are likely.'</span>);
+        fprintf(<span class="string">'\n\n'</span>);
+    <span class="keyword">else</span>
+        fprintf(<span class="string">'\n'</span>);
+    <span class="keyword">end</span>
+
+<span class="keyword">else</span> <span class="comment">%If the user wants to order primers</span>
+    fprintf(<span class="string">'The primers to order are:  \n'</span>);
+    [rows, ~] = size(Primerstorage);
+    Spacercount = 1;
+
+    <span class="keyword">for</span> i = 1:rows
+        <span class="keyword">if</span> mod(i,2) == 0 <span class="comment">%If we are on an even number row</span>
+            fprintf(<span class="string">'Spacer %d, Reverse:  '</span>, floor(Spacercount));
+        <span class="keyword">else</span> <span class="comment">%If we are on an odd number row</span>
+            fprintf(<span class="string">'Spacer %d, Forward:  '</span>, floor(Spacercount));
+        <span class="keyword">end</span>
+        Spacercount = Spacercount+0.5;
+
+        cprintf(<span class="string">'[1,0,0]'</span>, <span class="string">'%s'</span>, Primerstorage(i,1:Enzseqlength));
+        cprintf(<span class="string">'Text'</span>, <span class="string">'%s'</span>, Primerstorage(i,14:Primerspacerstorage(i)-1));
+        cprintf(<span class="string">'Strings'</span>,<span class="string">'%s'</span>, Primerstorage(i,Primerspacerstorage(i):Primerspacerstorage(i)+Primeroverlap-1));
+        fprintf(<span class="string">'\n'</span>);
+
+    <span class="keyword">end</span>
+    fprintf(<span class="string">'\n'</span>);
+
+<span class="keyword">end</span>
+
+cprintf(<span class="string">'Text'</span>, <span class="string">'%s'</span>, char(8722*ones(1,2*Repeatlength+Spacerlength)));
+fprintf(<span class="string">'\n'</span>);
+</pre><pre class="codeoutput">The primers to order are:  
+Spacer 1, Forward:  5'-CCGGCCAGAGTAGAT11111111
+Spacer 1, Reverse:  5'-CCGGCCAGAGTCTACAACAGTAGAAATT11111111
+Spacer 2, Forward:  5'-CCGGCCAGAGTGTAGAT22222222
+Spacer 2, Reverse:  5'-CCGGCCAGAGCAACAGTAGAAATT22222222
+Spacer 3, Forward:  5'-CCGGCCAGAGCTGTTGTAGAT33333333
+Spacer 3, Reverse:  5'-CCGGCCAGAGAACAGTAGAAATT33333333
+Spacer 4, Forward:  5'-CCGGCCAGAGACTGTTGTAGAT44444444
+Spacer 4, Reverse:  5'-CCGGCCAGAGACAGTAGAAATT44444444
+Spacer 5, Forward:  5'-CCGGCCAGAGTACTGTTGTAGAT55555555
+Spacer 5, Reverse:  5'-CCGGCCAGAGCAGTAGAAATT55555555
+Spacer 6, Forward:  5'-CCGGCCAGAGCTACTGTTGTAGAT66666666
+Spacer 6, Reverse:  5'-CCGGCCAGAGAGTAGAAATT66666666
+Spacer 7, Forward:  5'-CCGGCCAGAGTCTACTGTTGTAGAT77777777
+Spacer 7, Reverse:  5'-CCGGCCAGAGAGAAATT77777777
+Spacer 8, Forward:  5'-CCGGCCAGAGATTTCTACTGTTGTAGAT88888888
+Spacer 8, Reverse:  5'-CCGGCCAGAGGAAATT88888888
+
+&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;&#8722;
+</pre><h2>Export output to Excel<a name="14"></a></h2><pre class="codeinput">Descriptoralphabet = [<span class="string">'A'</span>; <span class="string">'B'</span>; <span class="string">'C'</span>; <span class="string">'D'</span>; <span class="string">'E'</span>; <span class="string">'F'</span>; <span class="string">'G'</span>; <span class="string">'H'</span>; <span class="string">'I'</span>; <span class="string">'J'</span>; <span class="string">'K'</span>; <span class="string">'L'</span>; <span class="string">'M'</span>; <span class="string">'N'</span>; <span class="string">'O'</span>; <span class="string">'P'</span>];
+
+<span class="keyword">if</span> Orderoligos == 1                 <span class="comment">%If the user wants to order oligos</span>
+        Descloc = 1;                <span class="comment">%Keeps track of the excel output location (Increases by 1 each inner loop only)</span>
+        Printoption = <span class="string">'C6'</span>;                 <span class="comment">%Determines where final array will output in Excel</span>
+
+    <span class="keyword">if</span> Desiredspacerorder_bin == 1  <span class="comment">%If there are multiple spacer options for each location</span>
+        [rows, ~] = size(Oligostorage);
+        Exceldescriptor = char(zeros(1,length(Prefix)+4)); <span class="comment">%Storage for Oligo names ('X_A1_F')</span>
+
+        Loc = 1;                    <span class="comment">%Keeps track of the row in Oligostorage we're looking at</span>
+
+        <span class="keyword">for</span> i = 1:Spacernum <span class="comment">%Number of spacers</span>
+            <span class="keyword">for</span> j = 1:Spaceroptioncount(i) <span class="comment">%Number of options for each spacer</span>
+                <span class="keyword">for</span> k = 1:2 <span class="comment">%Forward and reverse</span>
+                    <span class="keyword">if</span> k == 1 <span class="comment">%Forward</span>
+                        Exceldescriptor(Descloc,:) = [Prefix Descriptoralphabet(i) num2str(j) <span class="string">'_F'</span>];
+
+                        Output = [Oligostorage(Loc,1:Oligospacerstorage(Loc)-1)  char(Spaceroptionseq(j,i)) Oligostorage(Loc,Oligospacerstorage(Loc)+Spacerlength:Oligolengthstorage(Loc))];
+                        Exceloutput(Descloc,1:length(Output)) = Output;
+
+                    <span class="keyword">elseif</span> k == 2 <span class="comment">%Reverse</span>
+                        Exceldescriptor(Descloc,:) = [Prefix Descriptoralphabet(i) num2str(j) <span class="string">'_R'</span>];
+
+                        <span class="keyword">if</span> isempty(Oligostorage(Loc,1:Oligospacerstorage(Loc)-1)) == 1
+                            Output = fliplr([InvertNucs(char(Spaceroptionseq(j,i))) Oligostorage(Loc,Oligospacerstorage(Loc)+Spacerlength:Oligolengthstorage(Loc))]);
+
+                        <span class="keyword">else</span>
+                            Output = fliplr([Oligostorage(Loc,1:Oligospacerstorage(Loc)-1)  InvertNucs(char(Spaceroptionseq(j,i))) Oligostorage(Loc,Oligospacerstorage(Loc)+Spacerlength:Oligolengthstorage(Loc))]);
+
+                        <span class="keyword">end</span>
+
+                        Exceloutput(Descloc,1:length(Output)) = Output;
+                    <span class="keyword">end</span>
+
+                    Loc = Loc+1;
+                    Descloc = Descloc+1;
+                <span class="keyword">end</span>
+                Loc = Loc-2;
+            <span class="keyword">end</span>
+            Loc = Loc+2;
+        <span class="keyword">end</span>
+
+    <span class="keyword">else</span> <span class="comment">%If there is a specified order for the spacers</span>
+        Exceldescriptor = char(zeros(1,length(Prefix)+3));
+
+        <span class="keyword">for</span> i = 1:Spacernum
+            Exceldescriptor(Descloc,:) = [Prefix Descriptoralphabet(i) <span class="string">'_F'</span>];
+            Output = Oligostorage(Descloc,1:Oligolengthstorage(Descloc));
+            Exceloutput(Descloc,1:length(Output)) = Output;
+            Descloc = Descloc+1;
+
+            Exceldescriptor(Descloc,:) = [Prefix Descriptoralphabet(i) <span class="string">'_R'</span>];
+            Output = fliplr(Oligostorage(Descloc,1:Oligolengthstorage(Descloc)));
+            Exceloutput(Descloc,1:length(Output)) = Output;
+            Descloc = Descloc+1;
+        <span class="keyword">end</span>
+
+    <span class="keyword">end</span>
+
+<span class="keyword">else</span> <span class="comment">%If the user wants to order primers</span>
+        Descloc = 1;                        <span class="comment">%Keeps track of the excel output location (Increases by 1 each inner loop only)</span>
+        Printoption = <span class="string">'F6'</span>;                 <span class="comment">%Determines where final array will output in Excel</span>
+
+    <span class="keyword">if</span> Desiredspacerorder_bin == 1          <span class="comment">%If there are multiple spacer options for each location</span>
+        [rows, ~] = size(Primerstorage);
+        Exceldescriptor = char(zeros(1,length(Prefix)+4)); <span class="comment">%Storage for primer names ('X_A1_F')</span>
+        Loc = 1;                            <span class="comment">%Keeps track of the row in Primerstorage we're looking at</span>
+
+        <span class="keyword">for</span> i = 1:Spacernum <span class="comment">%Number of spacers</span>
+            <span class="keyword">for</span> j = 1:Spaceroptioncount(i) <span class="comment">%Number of options for each spacer</span>
+                <span class="keyword">for</span> k = 1:2 <span class="comment">%Forward and reverse</span>
+                    <span class="keyword">if</span> k == 1
+                        Exceldescriptor(Descloc,:) = [Prefix Descriptoralphabet(i) num2str(j) <span class="string">'_F'</span>];
+                        Currentspaceroption = char(Spaceroptionseq(j,i));
+                        Output = [Primerstorage(Loc,4:Primerspacerstorage(Loc)-1) Currentspaceroption(1:Primeroverlap)];
+                        Exceloutput(Descloc,1:length(Output)) = Output;
+
+                    <span class="keyword">elseif</span> k == 2
+                        Exceldescriptor(Descloc,:) = [Prefix Descriptoralphabet(i) num2str(j) <span class="string">'_R'</span>];
+                        Currentspaceroption = char(Spaceroptionseq(j,i));
+                        Currentspaceroption = fliplr(InvertNucs(Currentspaceroption));
+                        Output = [Primerstorage(Loc,4:Primerspacerstorage(Loc)-1) Currentspaceroption(1:Primeroverlap)];
+
+                        Exceloutput(Descloc,1:length(Output)) = Output;
+                    <span class="keyword">end</span>
+
+                    Loc = Loc+1;
+                    Descloc = Descloc+1;
+                <span class="keyword">end</span>
+                Loc = Loc-2;
+            <span class="keyword">end</span>
+            Loc = Loc+2;
+        <span class="keyword">end</span>
+
+    <span class="keyword">else</span> <span class="comment">%If there is a specified order for the spacers</span>
+        Exceldescriptor = char(zeros(1,length(Prefix)+3));
+
+        <span class="keyword">for</span> i = 1:Spacernum
+            Exceldescriptor(Descloc,:) = [Prefix Descriptoralphabet(i) <span class="string">'_F'</span>];
+            Output = Primerstorage(Descloc,4:Primerspacerstorage(Descloc)+Primeroverlap-1);
+            Exceloutput(Descloc,1:length(Output)) = Output;
+            Descloc = Descloc+1;
+
+            Exceldescriptor(Descloc,:) = [Prefix Descriptoralphabet(i) <span class="string">'_R'</span>];
+            Output = Primerstorage(Descloc,4:Primerspacerstorage(Descloc)+Primeroverlap-1);
+            Exceloutput(Descloc,1:length(Output)) = Output;
+            Descloc = Descloc+1;
+        <span class="keyword">end</span>
+
+    <span class="keyword">end</span>
+
+<span class="keyword">end</span>
+
+<span class="keyword">for</span> i = 1:Descloc-1 <span class="comment">%Convert the matrix of strings to a cell array for faster printing in Excel.</span>
+    Exceloutputcell(i,1) = {Exceldescriptor(i,:)};
+    Exceloutputcell(i,2) = {Exceloutput(i,:)};
+
+<span class="keyword">end</span>
+
+<span class="comment">%Print the final array.</span>
+xlswrite(<span class="string">'Accompanying Excel Workbook.xlsx'</span>, Exceloutputcell, <span class="string">'Example_Output'</span>, Printoption);
+</pre><h2>Final Completion Statement and Time Elapsed<a name="15"></a></h2><pre class="codeinput">fprintf(<span class="string">'Script completed!\n'</span>);
+toc
+</pre><pre class="codeoutput">Script completed!
+Elapsed time is 6.576672 seconds.
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Quentin Leitz
+% Koffas Lab Research
+% Updated January 21, 2017
+% CRISPR Planner Driving File
+close all
+clear
+clc
+
+%% Read Inputs from Accompanying Excel Workbook
+tic %Begin timer.
+
+[Parameters,Strings,~] = xlsread('Accompanying Excel Workbook.xlsx','Example','H4:I29');
+%Read in parameters and strings from the Excel sheet.
+
+Repeatstring = Capitalize(char(Strings(2,:))); %Forward direction repeat region.
+Repeatlength = length(Repeatstring);        %Length of the repeat region.
+Spacernum = Parameters(1);                  %Desired number of spacers in the final array.
+Overhangsize = Parameters(3);               %Bp for the desired overhang size.
+Spacerlength = Parameters(5);               %Bp for the desired spacer.
+Overhangnum = (2*Spacernum)+2;              %Number of overhangs to be defined.
+Desireddropseq_bin = Parameters(7);         %Binary for specifying initial dropout insert sequence.
+Desiredseq_bin = Parameters(10);            %Binary for specifying sequence of CRISPR spacers, in order.
+Desiredspacerorder_bin = Parameters(13);    %Binary for specifying multiple spacer options for each array location.
+Desiredenz_bin = Parameters(17);            %Binary for specifying the assembly enzyme.
+Orderoligos = Parameters(20);               %Binary for specifying whether to order oligos or primers.
+Naming_bin = Parameters(23);                %Binary for specifying the prefix of names in the output.
+
+%% Test Parameters for Validity
+if isempty(Repeatstring) || isnan(Spacernum) || isnan(Overhangsize) || isnan(Spacerlength) ...
+        || isnan(Desireddropseq_bin) || isnan(Desiredseq_bin) || isnan(Desiredspacerorder_bin) ...
+        || isnan(Desiredenz_bin) || isnan(Orderoligos)
+    %If the user hasn't provided any of the critical parameters in Inputs.
+    fprintf('ERROR: You have not provided sufficient parameters in the Inputs section.\n');
+    return
+else
+end
+
+if Desiredseq_bin == 1 && Desiredspacerorder_bin == 1 %Make sure E and F are not both selected.
+    fprintf('ERROR: You may not set both E and F equal to 1 at the same time. They are mutually exclusive options.\n');
+    return
+else
+end
+
+if Desireddropseq_bin == 1
+    %Create dropout sequence based on whether or not user has specified it.
+    [~,Dropoutseq,~] = xlsread('Accompanying Excel Workbook.xlsx','Example','E36:I36');
+    Dropoutseq = Capitalize(char(Dropoutseq));              %Convert to char.
+    Reversedropoutseq = InvertNucs(Dropoutseq); %Create reverse sequence.
+else %If no dropout sequence, use generic 'DDDD...' instead.
+    Dropoutseq = char(68*ones(1,Spacerlength));
+    Reversedropoutseq = Dropoutseq;             %Create reverse sequence.
+end
+
+if Desiredseq_bin == 1 %If we are trying to specify the insert sequences, in order.
+    [~,Spacerseq,~] = xlsread('Accompanying Excel Workbook.xlsx','Example','E39:E54'); %Read in insert sequences.
+    Spacerseq = Capitalize(char(Spacerseq));         %Convert to char.
+    [rows, columns] = size(Spacerseq);
+    if rows ~= Spacernum %If the user specified too many/too few spacer sequences.
+        fprintf('ERROR: The number of spacers specified in A must match the number of spacer sequences provided.\n');
+        return
+    else
+    end
+    
+    for i = 1:rows %If the user's spacer sequences are the wrong length.
+        TestChar = char(cellstr(Spacerseq(i,:)));
+        if length(Spacerseq(i,:)) ~= Spacerlength || length(TestChar) ~= Spacerlength
+            fprintf('ERROR: The length of spacers specified in C must match the length of spacer sequences provided.\n');
+            return
+        else
+        end
+    end
+else
+end
+
+if Desiredspacerorder_bin == 1 %If the user wants multiple spacer options for each location
+    [~,Spaceroptionseq,~] = xlsread('Accompanying Excel Workbook.xlsx','Example','E59:T74'); %Read in spacer options
+    [rows, columns] = size(Spaceroptionseq);
+    if columns < Spacernum %If the user didn't provide enough spacer options
+        fprintf('ERROR: There must be the same number of spacer options as specified in A\n');
+        return
+    elseif columns > Spacernum %If the user provided too many spacer options, trim to the first ones)
+        Spaceroptionseq = Spaceroptionseq(:,1:Spacernum);
+    end
+    
+    Spaceroptioncount = zeros(1,Spacernum); %Counts how many options for each spacer location
+    
+    for i = 1:Spacernum %Step through spacer locations A,B,C...
+        for j = 1:rows %Step through options for each location 1,2,3...
+            charSpaceroptionseq = char(Spaceroptionseq(j,i));
+            if length(charSpaceroptionseq) ~= Spacerlength %Test that the spacer options are the correct length
+                if j == 1 %If there is a bad spacer
+                    fprintf('ERROR: There must be at least one spacer specified for each option.\n');
+                    fprintf('Make sure your spacer options start at row 1 (Excel row 15) and proceed downwards.\n');
+                    return
+                else
+                    fprintf('ERROR: Make sure that your spacers are the length specified in C.\n');
+                    return
+                end
+                
+            else
+                Spaceroptioncount(i) = Spaceroptioncount(i) + 1;
+            end
+            
+        end
+    end
+    
+else
+    
+end
+
+if Desiredenz_bin == 1 %If the user wants to specify the assembly enzyme sequence.
+    [~,Enzseq,~] = xlsread('Accompanying Excel Workbook.xlsx','Example','E77'); %Read in enzyme sequence.
+    Enzseq = ['5''-' char(Enzseq)];
+else
+    Enzseq = '5''-CCGGCCAGAG';
+end
+    
+if Orderoligos == 1 %If the user wants to order primers, read in primer overlap length.
+    %If they don't want to order primers, then just use the default value.
+    %(8) for coloring purposes in the Procedure sections.
+    Primeroverlap = 8; %Bp into the desired spacer our primers should overlap (Default value).    
+else
+    Primeroverlap = xlsread('Accompanying Excel Workbook.xlsx','Example','J79');
+end
+
+if Naming_bin == 1 %If the user wants to specify a naming prefix for the outputs.
+    [~,Prefix,~] = xlsread('Accompanying Excel Workbook.xlsx','Example','J81'); %Read in oligo/PCR product prefix.
+    Prefix = [char(Prefix) '_'];
+else
+    Prefix = 'X_'; %If no naming prefix specified, use the generic option. 
+end 
+    
+%% Create the Reverse String
+Repeatstringrev = InvertNucs(Repeatstring); %Complement for the repeat region.
+
+fprintf('The DNA looks like: \n');          %Print 5'->3' and 3'->5'.
+disp([Repeatstring;Repeatstringrev]);
+
+Repeatstringrev = fliplr(Repeatstringrev);  %Flip RepeatStringRev for proper readibility.
+
+%% Define Palindromic Sequences to Avoid
+[Position, Length, Pal] = palindromes(Repeatstring,'Length',Overhangsize,'Complement', true);
+%Searches through the repeatstring and finds all palindromic sequences.
+%These sequences are the same in the reverse string, so two overhangs
+%should be discarded for each palindromic sequence found here.
+
+for i = 1:length(Position)
+    if Length(i) == Overhangsize
+        Palindromestorage(i) = Pal(i);      %Stores palindromic sequences.
+    else
+        
+    end
+end
+
+if exist('Palindromestorage', 'var')
+    %If we have a palindrome storage vector, we caught some palindromes.
+    Palindromestorage = char(Palindromestorage); %Converts to char for printing.
+    [Palrows,~] = size(Palindromestorage);
+    
+    fprintf('\nOverhangs removed due to palindromes: %d\n', 2*Palrows); %Print result.
+    disp(Palindromestorage);
+else %If we don't, print that we did not find any palindromes.
+    Palrows = 0;
+    fprintf('\nOverhangs removed due to palindromes: %d\n',Palrows);
+    
+end
+
+
+%% Step Through and Record all Potential Overhang Choices
+Overhangstorage = zeros(2*(Repeatlength-Overhangsize+1),Overhangsize);
+Overhangdesc = zeros(2*(Repeatlength-Overhangsize+1),2);
+Loc = 1;
+Palfailed = 0;
+Palfailcounter = 0;
+
+for i = 1:2 %i=1: 5'->3'; i=2: 3'->5'
+    for j = 1:Repeatlength-Overhangsize+1
+        if Palrows ~= 0
+            for k = 1:Palrows       %Test whether overhang equals any of our palindromes.
+                if i == 1
+                    if Repeatstring(j:j+Overhangsize-1) == Palindromestorage(k,:)
+                        Palfailed = 1;  %If it does, Failed = 1 and don't add to storage.
+                    else
+                    end
+                else
+                    if Repeatstringrev(j:j+Overhangsize-1) == Palindromestorage(k,:)
+                        Palfailed = 1;  %If it does, Failed = 1 and don't add to storage.
+                    else
+                    end
+                end
+            end
+        else
+        end
+        
+        if Palfailed == 1;      %Track number of palindromic overhangs caught.
+            Palfailcounter = Palfailcounter+1;
+        else
+        end
+        
+        if i == 1 && Palfailed == 0; %5'->3' and not a palindrome.
+            Overhangdesc(Loc,1) = i; %Whether we're 5'->3' or 3'-> 5'.
+            Overhangdesc(Loc,2) = j; %Start location in the repeat.
+            Overhangstorage(Loc,1:Overhangsize) = Repeatstring(j:j+Overhangsize-1); %Overhang BPs.
+            Loc = Loc+1;             %Step forward with the counter variable.
+            
+        elseif i == 2 && Palfailed == 0; %3'->5' and not a palindrome.
+            Overhangdesc(Loc,1) = i; %Whether we're 5'->3' or 3'-> 5'.
+            Overhangdesc(Loc,2) = j+Repeatlength; %Start location in the repeat.
+            Overhangstorage(Loc,1:Overhangsize) = fliplr(Repeatstringrev(j:j+Overhangsize-1)); %Overhang BPs.
+            Loc = Loc+1;             %Step forward with the counter variable.
+            
+        else
+        end
+        
+        Palfailed = 0; %Reset palindrome fail variable for next overhang.
+        %To test if all palindromes were caught, ensure that
+        %Palfailcounter = 2*Palrows.
+    end
+    
+end
+
+[rows, ~] = size(Overhangstorage);
+
+%Trim Overhangstorage to remove rows initialized but never filled
+%due to palindromic sequences.
+Overhangstorage = Overhangstorage(1:rows-Palfailcounter,:);
+Overhangdesc = Overhangdesc(1:rows-Palfailcounter,:);
+
+Overhangstorage = char(Overhangstorage); %Convert to character array.
+
+%% Catalog Overhangs Already Specified by the Dropout Insert/Repeat Region
+Backboneoverhangs = [fliplr(Repeatstringrev(1:Overhangsize)) ; Repeatstring(2:Overhangsize+1)];
+Specifiedoverhangs = [Backboneoverhangs ; InvertNucs(Backboneoverhangs)];
+
+%Store the locations of those backbone overhangs
+Specifiedoverhanginfo = [Repeatlength+1 ; 2 ; Repeatlength-Overhangsize+1 ; ...
+    2*Repeatlength-Overhangsize];
+
+[rows, ~] = size(Specifiedoverhangs);
+Numspecoverhangs = rows;
+
+%% Perform Random Walk to Find an Acceptable Solution
+Progress = 0;                               %The number of choices we have made.
+Progresstarget = Spacernum-1;               %Target number of choices to make for Progress.
+
+Choiceinfomid1 = (1+Repeatlength)/2;        %Middle of repeat bp in the 5'->3' direction.
+Choiceinfomid2 = (3*Repeatlength+2)/2;      %Middle of repeat bp in the 3'->5' direction.
+
+Compilspecoverhangs = Specifiedoverhangs;       %Initial compiled specified overhangs equals those set by the backbone.
+Compilnumspecoverhangs = Numspecoverhangs;      %Initial number of specified overhangs equals number specified by the backbone.
+Compilspecoverhanginfo = Specifiedoverhanginfo; %Initial compiled locations are those specified by the backbone.
+
+badchoice = false;                          %Whether or not we have made a bad choice on this while loop.
+badchoicecount = 1;                         %How many bad choices we have made.
+badchoicedetails = -1;                      %Stores our degree of Progress when we realize our choice was bad.
+
+Failed = 0;                                 %Whether or not we failed (ran out of options to test). This breaks while loop.
+
+[rowsOverhangstorage,~] = size(Overhangstorage); %Store size of overhangstorage for looping.
+
+while length(Compilspecoverhangs) < Overhangnum
+    %Loop until we have the final number of overhangs required.
+    clear Potentialchoice Choiceinfo Choicemismatchinfo     %Clear these vectors which are built on each iteration.
+    clear Consolpotentialchoice Consolchoiceinfo Consolchoicemismatchinfo
+    Mismatchvec = zeros(Compilnumspecoverhangs,1);  %Initialize mismatchvec size based on # of specified overhangs.
+    
+    if badchoice == true %If we went down a path that ran out of options.
+        Progress = 0;                               %Reset progress.
+        Compilspecoverhangs = Specifiedoverhangs;   %Reset specified overhangs.
+        Compilnumspecoverhangs = Numspecoverhangs;  %Reset number of specified overhangs.
+        Compilspecoverhanginfo = Specifiedoverhanginfo; %Reset locations of specified overhangs.
+        clear Choicestorage                         %Reset previous choices.
+        clear Choiceinfostorage                     %Reset previous choice locations.
+        
+        badchoice = false;                          %Reset badchoice binary.
+        
+    else
+    end
+    
+    Loc = 1;
+    %Set location counter, which is used to specify the storage of
+    %potential overhang choices and their information.
+    
+    for i = 1:rowsOverhangstorage   %Scan through all overhangs.
+        
+        for j = 1:Compilnumspecoverhangs      %Compare overhang to specified overhangs.
+            Mismatchvec(j) = sum(Overhangstorage(i,:) ~= Compilspecoverhangs(j,:));
+            %Count the number of mismatches between the overhang being
+            %tested and each of the already specified overhangs.
+            
+        end
+        
+        Triedandfailed = false;
+        
+        if exist('Choicestorage', 'var') %If this not our first choice
+            for j = 1:length(badchoicedetails) %Scan through previous bad choices
+                if badchoicedetails(j) == Progress+1 ...
+                        && all(all((badchoicestorage(1:Progress,4*j-3:4*j) == Choicestorage) == 1)) ...
+                        && all((badchoicestorage(Progress+1,4*j-3:4*j) == Overhangstorage(i,:)) == 1)
+                    %Conditions:
+                    %1. If we have failed at i before and are searching for i.
+                    %2. If our choices to this point have been the same as
+                    %       those where we failed.
+                    %3. If the overhang we're considering is the same as the
+                    %       one we have previously chosen and failed with.
+                    Triedandfailed = true;
+                    
+                else
+                end
+            end
+            
+        else %If this is our first choice (Can't use Choicestorage in if statement below).
+            for j = 1:length(badchoicedetails) %Scan through previous bad choices.
+                if badchoicedetails(j) == Progress+1 ...
+                        && all((badchoicestorage(Progress+1,4*j-3:4*j) == Overhangstorage(i,:)) == 1)
+                    %Conditions:
+                    %1. If we have failed at i before and are searching for i
+                    %2. If the overhang we're considering is the same as the
+                    %       one we have previously chosen and failed with.
+                    Triedandfailed = true;
+                    
+                else
+                end
+            end
+        end
+        
+        if any(Mismatchvec <= 1) || Triedandfailed == true
+            %Conditions:
+            %1. When there is 1 or less mismatch, that means 3-4 bps are
+            %   the same between the selected overhang and overhangs
+            %   already specified. Too similar.
+            %2. Trash options we have already tried and failed with.
+            
+            %If this is the case, Potentialchoice is never created and the
+            %next if statement fails. This triggers badchoice protocol.
+            
+            
+        else %Store options which are at least 2 bp different.
+            Potentialchoice(Loc,1:Overhangsize) = Overhangstorage(i,:);
+            %Store overhang info.
+            Choiceinfo(Loc,1) = Overhangdesc(i,2);          %Store choice location index.
+            Choicemismatchinfo(Loc,1) = sum(Mismatchvec);   %Store mismatch information.
+            Loc = Loc+1; %Counter for building choice vectors.
+            
+        end
+        Mismatchvec = zeros(length(Compilspecoverhangs),1); %Reset mismatchvec.
+        
+    end
+    
+    if exist('Potentialchoice', 'var')
+        %If we have at least one potential choice.
+        [rows, ~] = size(Potentialchoice);    %Check size of potential choice vector.
+        if rows >= Progresstarget-Progress
+            %If there are more potential choices than the number of
+            %decisions we have left to make, this path could be viable.
+            Sufficientsolutions = true;
+            
+        else    %If there are not enough potential choices, we failed.
+            Sufficientsolutions = false;
+        end
+    else        %If there are no potential choices, we failed.
+        Sufficientsolutions = false;
+    end
+    
+    if exist('Potentialchoice', 'var') && Sufficientsolutions == true
+        %Conditions:
+        %1. Make sure we found a solution, at least one solution.
+        %2. Ensure we have enough choices available to possibly succeed
+        %   along this path.
+        [rows, ~] = size(Choicemismatchinfo);
+        maxmismatch = max(Choicemismatchinfo);
+        %The potential choice with the fewest matches to already specified
+        %overhangs.
+        Loc = 1;
+        
+        for i = 1:rows %Consolidate potential choices based on max mismatch #.
+            if Choicemismatchinfo(i) >= maxmismatch-2
+                %Consolidate based on proximity to overhang with the
+                %highest degree oif mismatch.
+                Consolpotentialchoice(Loc,1:Overhangsize) = Potentialchoice(i,:);   %Overhang.
+                Consolchoiceinfo(Loc,1) = Choiceinfo(i);                 %Location index.
+                Consolchoicemismatchinfo(Loc,1) = Choicemismatchinfo(i); %Mismatch info.
+                Loc = Loc+1;
+                
+            else
+            end
+        end
+        
+        %Choose from the consolidated choices the one which is closest to
+        %the center of the repeat region.
+        Degreeofmid = abs([(Consolchoiceinfo - Choiceinfomid1) ...
+            (Consolchoiceinfo - Choiceinfomid2)]);
+        [value, loc] = min([Degreeofmid ;[1000 1000]]); %Choose value which is closest to the middle by row.
+        [value2, loc2] = min(min([Degreeofmid ; [1000 1000]])); %Value closest to the middle by column.
+        
+        %Store choice, add to specified overhangs, repeat.
+        Choicestorage(Progress+1,1:Overhangsize) = Consolpotentialchoice(loc(loc2),:); %Store overhang choices.
+        Choiceinfostorage(Progress+1,1) = Consolchoiceinfo(loc(loc2),1);               %Store overhang choice locations.
+        Choicemismatchstorage(Progress+1,1) = Consolchoicemismatchinfo(loc(loc2),1);   %Store degree of mismatch for choices.
+        Compilspecoverhangs = [Compilspecoverhangs ; Choicestorage(Progress+1,:) ; ... %Add choices to compiled specified overhangs.
+            InvertNucs(Choicestorage(Progress+1,:))];
+        Compilspecoverhanginfo = [Compilspecoverhanginfo ; Choiceinfostorage(Progress+1,1) ... %Add overhang choice location info to compiled.
+            ; (2*Repeatlength - Choiceinfostorage(Progress+1,1) - 2)];
+        
+        [rows, ~] = size(Compilspecoverhangs);
+        Compilnumspecoverhangs = rows;
+        Progress = Progress+1;
+        
+    else                        %What to do if we found no solution.
+        if Progress ~= 0        %If this is not our first choice.
+            badchoice = true;   %Set badchoice to true -> next while loop resets everything.
+            
+            if badchoicecount == 1 %If this is the first badchoice we've made.
+                badchoicestorage(1:Progress,1:Overhangsize) = Choicestorage(:,:);
+                
+            else %If this is not the first badchoice we've made, tack onto the end.
+                badchoicestorage(1:Progress,end+1:end+Overhangsize) = Choicestorage(:,:);
+                %Store the path to ensure we don't take it again.
+                
+            end
+            badchoicedetails(1,badchoicecount) = Progress;
+            badchoicecount = badchoicecount+1;
+            
+        else
+            %Handles case where we run out of options for choice 1 and must
+            %terminate without returning a solution.
+            Failed = 1;
+            break
+            
+        end
+        
+    end
+    
+end
+
+
+%% Display Overhang Selection
+if Failed == 1          %If we reached no solution
+    fprintf('\nA solution could not be determined with the parameters given\n');
+    return
+    
+else                    %If we reached a solution
+    fprintf('\nSpecified overhangs: %d\n',length(Compilspecoverhangs));
+    disp(Compilspecoverhangs)
+    fprintf('\nOverhang choices: %d\n', length(Choicestorage));
+    disp(char(Choicestorage));
+end
+
+%% Perform Comparisons Between all Overhang Choices and Create Match Index
+[rows, ~] = size(Choicestorage);
+
+Comparisonstorage = zeros(rows,4*rows);
+Matchindexstorage = zeros(rows,rows);
+Loc = 1;
+
+for i = 1:rows %Building rows of Comparison matrix
+    Comparisontarget = Choicestorage(i,1:Overhangsize);
+    
+    for j = Loc:rows %Building columns of Comparison matrix
+        Compareresult = Comparisontarget == Choicestorage(j,1:Overhangsize);
+        Matchindexstorage(j,i) = sum(Compareresult);
+        
+    end
+    
+    Loc = Loc+1;
+end
+
+% f = figure('units','normalized','position',[.05 0.05 0.9 0.8]);
+% t = uitable(f, 'Data', Matchindexstorage, 'ColumnName', Choicestorage, 'RowName', Choicestorage, 'Position', [20 20 1800 680]);
+
+fprintf('\nMatrix of overhang match indices (0 -> perfect mismatch; 4 -> perfect match):\n');
+disp(Matchindexstorage);
+
+%% Make Choices about the Order of Overhangs in the Final Assembly
+clearvars -except Choicestorage Choiceinfostorage Backboneoverhangs Repeatstring ...
+    Repeatstringrev Overhangsize Spacernum Repeatlength Matchindexstorage ...
+    Compilspecoverhangs Overhangstorage Backboneoverhanginfo Spacerlength ...
+    Compilspecoverhanginfo Overhangnum Desiredseq_bin Desiredenz_bin ...
+    Desireddumseq_bin Desiredseqs Primeroverlap Orderoligos Dropoutseq ...
+    Reversedropoutseq Spacerseq Spaceroptionseq Desiredspacerorder_bin ...
+    Spaceroptioncount Enzseq Prefix
+%Clear all of the temporary junk.
+
+[rowsspecoverhangs, ~] = size(Compilspecoverhangs);
+Potentialsegmentlength = zeros(rowsspecoverhangs,1);
+Progress = 0;
+Overhangorder = char(zeros(1,Overhangsize));
+Overhanglocation = 0;
+Segmentlength = 0;
+
+while Progress < Overhangnum - 4
+    
+    Potentialsegmentlength = zeros(rowsspecoverhangs,1);
+    
+    for i = 5:rowsspecoverhangs
+        if any(Overhanglocation == Compilspecoverhanginfo(i))
+            %Test whether we have used this overhang before. If yes, do not
+            %consider it and move on to the next overhang choice.
+            
+        else
+            if Progress == 0 %We are on the first spacer
+                if Compilspecoverhanginfo(i) > Repeatlength
+                    %We are on the reverse string going 3'->5'
+                    Potentialsegmentlength(i) = 4 + Spacerlength + ...
+                        2*Repeatlength - Compilspecoverhanginfo(i) + 1;
+                    
+                else    %We are on the forward string going 5'->3'
+                    Potentialsegmentlength(i) = 0;
+                    %Set in excess; can't use a 5'->3' overhang for this
+                    %choice.
+                    
+                end
+                
+            elseif Progress > 0 && Progress < Overhangnum - 6  %We are on a middle spacer
+                if Compilspecoverhanginfo(i) > Repeatlength ...
+                        %We are on the reverse string going 3'->5'
+                    Potentialsegmentlength(i) = Repeatlength - Overhanglocation(Progress+1) ...
+                        + 1 + Spacerlength + 2*Repeatlength - Compilspecoverhanginfo(i) + 1;
+                    
+                else    %We are on the forward string going 5'->3'
+                    Potentialsegmentlength(i) = 0;
+                    
+                end
+                
+            else %We are on the final spacer.
+                if Compilspecoverhanginfo(i) > Repeatlength ...
+                        %We are on the reverse string going 3'->5'
+                    Potentialsegmentlength(i) = Repeatlength - Overhanglocation(Progress+1) ...
+                        + 1 + Spacerlength + 5;
+                    
+                else    %We are on the forward string going 5'->3'
+                    Potentialsegmentlength(i) = 0;
+                    
+                end
+                
+            end
+        end
+        
+    end
+    
+    %Select the choice which results in the segment length closest to but
+    %under 60bp.
+    [maxlength,maxloc] = max(Potentialsegmentlength);
+    
+    if maxlength > 60
+        if any((0 < Potentialsegmentlength).*(Potentialsegmentlength < 60))
+            %Check if there are any nonzero segment lengths less than 60.
+            for i = 1:length(Potentialsegmentlength)
+                if Potentialsegmentlength(i) >= 60 %Replace above 60 with 0
+                    Potentialsegmentlength(i) = 0;
+                else
+                end
+                
+            end
+            
+            %Choose the segment which is closest to but less than 60.
+            [minlength, minloc] = min(60 - Potentialsegmentlength);
+            Overhangorder = [Overhangorder ; Compilspecoverhangs(minloc,:) ; ...
+                InvertNucs(Compilspecoverhangs(minloc,:))];
+            
+            Overhanglocation = [Overhanglocation ; Compilspecoverhanginfo(minloc,:) ; ...
+                Loc2ComplementLoc(Compilspecoverhanginfo, Compilspecoverhanginfo(minloc,:), Repeatlength)];
+            
+            Segmentlength = [Segmentlength ; Potentialsegmentlength(minloc)];
+            
+        else
+            %If the max length is greater than 60 and there are no
+            %potential segments available that are less than 60, choose the
+            %largest length segment available (going to have to PCR it).
+            Overhangorder = [Overhangorder ; Compilspecoverhangs(maxloc,:) ; ...
+                InvertNucs(Compilspecoverhangs(maxloc,:))];
+            
+            Overhanglocation = [Overhanglocation ; Compilspecoverhanginfo(maxloc) ; ...
+                Loc2ComplementLoc(Compilspecoverhanginfo, Compilspecoverhanginfo(maxloc), Repeatlength)];
+            
+            Segmentlength = [Segmentlength ; Potentialsegmentlength(maxloc)];
+            
+        end
+        
+    else
+        %If maxlength is less than or equal to 60, Illumina seq. will work
+        %with high fidelity. Use the overhang choice resulting in a seq.
+        %length closest to 60bp.
+        Overhangorder = [Overhangorder ; Compilspecoverhangs(maxloc,:) ; ...
+            InvertNucs(Compilspecoverhangs(maxloc,:))];
+        
+        Overhanglocation = [Overhanglocation ; Compilspecoverhanginfo(maxloc) ; ...
+            Loc2ComplementLoc(Compilspecoverhanginfo, Compilspecoverhanginfo(maxloc), Repeatlength)];
+        
+        Segmentlength = [Segmentlength ; Potentialsegmentlength(maxloc)];
+        
+    end
+    
+    Progress = Progress + 2;
+    
+end
+
+Overhangorder = [Compilspecoverhangs(3,:); Overhangorder(2:end,:) ; Compilspecoverhangs(4,:)]; %Trim storage matrices of initial 0's
+Overhanglocation = [Compilspecoverhanginfo(3) ; Overhanglocation(2:end,:) ; Compilspecoverhanginfo(4)];
+Segmentlength = Segmentlength(2:end,1);
+
+%% Print the Assembly with Instructions
+Repeatstringrev = fliplr(Repeatstringrev);
+Enzseqlength = length(Enzseq);
+Reverseenzseq = [fliplr(Enzseq(1,4:end)) '-5'''];
+
+Colorvec = {'[0.96 0.24 0.02]' '[0.98 0.71 0.08]' '[0.35 0.91 0.07]' ...
+    '[0.08 0.38 0.1]' '[0.07 0.58 0.88]' '[0.09 0.41 0.4]'  ...
+    '[0.09 0.09 0.87]' '[0.36 0.1 0.89]' '[0.68 0.13 0.87]' '[0.97 0.22 0.56]'...
+    '[0.5 1 1]' '[0.25 0 0]' '[0.5 0 0.5]' '[0.25 0.5 0.5]' ...
+    '[0.55 0.58 0.14]' '[1 0.5 0.5]'};
+%Vector with various color options.
+Colorveccounter = 1; %Counter for cycling through Colorvec.
+
+for i = 1:length(Overhanglocation)
+    if Overhanglocation(i) > Repeatlength
+        Overhanglocation(i) = Loc2ComplementLoc(Compilspecoverhanginfo, ...
+            Overhanglocation(i), Repeatlength);
+    else
+    end
+    
+end
+
+%Print the starting form of the DNA
+fprintf('\nDNA Prior to any cutting:\n');
+cprintf('Text', Repeatstring);
+cprintf('Strings',Dropoutseq);
+cprintf('Text', Repeatstring);
+fprintf('\n');
+
+cprintf('Text', Repeatstringrev);
+cprintf('Strings', Reversedropoutseq);
+cprintf('Text', Repeatstringrev);
+
+%Print the DNA after cutting out the dropout
+fprintf('\n\nDNA backbone after cutting out the dropout:\n');
+cprintf('Text', [Repeatstring(1:Repeatlength-Overhangsize) char(zeros(1, Overhangsize))]);
+cprintf('Text', char(zeros(1,Spacerlength+1)));
+cprintf(Colorvec{1+Spacernum}, [Repeatstring(2:2+Overhangsize-1) ' ']); fprintf('\b');
+cprintf('Text', Repeatstring(2+Overhangsize-1:Repeatlength));
+
+fprintf('\n');
+cprintf('Text', Repeatstringrev(1:Repeatlength-Overhangsize));
+cprintf(Colorvec{1}, [Repeatstringrev(Repeatlength-Overhangsize+1:Repeatlength) ' ']); fprintf('\b');
+cprintf('Text', char(zeros(1,Spacerlength+Overhangsize+1)));
+cprintf('Text', Repeatstringrev(Overhangsize+1:Repeatlength));
+fprintf('\n\n');
+
+cprintf('Text', '%s', char(8722*ones(1,2*Repeatlength+Spacerlength)));
+fprintf('\n');
+
+% Initialize parameters for printing out each successive spacer procedure.
+Progress = 0;
+Seqnum = 0;
+Loc = 1;
+Storagecounter = 1;
+Oligolengthstorage = zeros(Spacernum*2,1);
+
+if Desiredseq_bin == 1
+    Spaceroption = '%s';
+else
+    Spaceroption = '%d';
+end
+
+while Progress < Spacernum
+    fprintf('Procedure for Spacer:  %d\n',Progress+1);
+    Pushforward = false;
+    Degreeofpush1 = 0;
+    
+    if Desiredseq_bin == 1
+        Spacerseqcurrent = Spacerseq(Progress+1,:);
+        
+    else
+        Spacerseqcurrent = (Seqnum+1)*ones(1,Spacerlength);
+        
+    end
+    
+    %Primer overlap
+    if Overhanglocation(Loc) > Enzseqlength+1 
+        cprintf('Text', char(zeros(1,Overhanglocation(Loc)-14-1)));
+        cprintf('[1,0,0]', Enzseq);
+        fprintf('\n');
+        
+    else
+        Pushforward = true;
+        if Overhanglocation(Loc) - (Enzseqlength-1) > 0
+            Degreeofpush1 = abs(Overhanglocation(Loc)-(Enzseqlength+1))+1;
+            Degreeofpush2 = abs(Overhanglocation(Loc)-(Enzseqlength+1))+1;
+        else
+            Degreeofpush1 = abs(Overhanglocation(Loc)-(Enzseqlength+1))+1;
+            Degreeofpush2 = 3;
+        end
+        cprintf('[1,0,0]', Enzseq);
+        fprintf('\n');
+    end
+    
+    %Forward string
+    if Pushforward == true
+        cprintf('Text', char(zeros(1,Degreeofpush1)));
+    else
+    end
+    
+    if Orderoligos == 1 %Store oligos for printing later
+        Vec2store = [Repeatstring(Overhanglocation(Loc): ...
+            Overhanglocation(Loc)+Overhangsize-1) ...
+            Repeatstring(Overhanglocation(Loc)+Overhangsize:Repeatlength) ...
+            num2str(Spacerseqcurrent,'%u') Repeatstring(1:Overhanglocation(Loc+1)-1)];
+        Oligostorage(Storagecounter,1:length(Vec2store)) = Vec2store;
+        Oligolengthstorage(Storagecounter) = length(Vec2store);
+        Oligospacerstorage(Storagecounter) = length(Repeatstring(Overhanglocation(Loc):...
+            Overhanglocation(Loc)+Overhangsize-1)) + ...
+            length(Repeatstring(Overhanglocation(Loc)+Overhangsize:Repeatlength)) + 1;
+        Storagecounter = Storagecounter+1;
+        
+    else %Store primers for printing later
+        Vec2store = [Enzseq ...
+            Repeatstring(Overhanglocation(Loc)-1:Repeatlength)...
+            num2str(Spacerseqcurrent(1,1:Primeroverlap),'%u')];
+        Primerstorage(Storagecounter,1:length(Vec2store)) = Vec2store;
+        Primerspacerstorage(Storagecounter) = Enzseqlength + ...
+            length(Repeatstring(Overhanglocation(Loc)-1:Repeatlength)) + 1;
+        Storagecounter = Storagecounter+1;
+        
+    end
+    
+    cprintf('Text', Repeatstring(1:Overhanglocation(Loc)-2));
+    cprintf('[1,0,0]', Repeatstring(Overhanglocation(Loc)-1:Repeatlength));
+    
+    cprintf('[1,0,0]', Spaceroption, Spacerseqcurrent(1,1:Primeroverlap));
+    cprintf('Strings', Spaceroption, Spacerseqcurrent(1,Primeroverlap+1:Spacerlength));
+    
+    cprintf('Text', Repeatstring);
+    fprintf('\n');
+    Loc = Loc+1;
+    
+    %Reverse string
+    if Pushforward == true
+        cprintf('Text', char(zeros(1,Degreeofpush1)));
+    else
+    end
+    
+    if Orderoligos == 1 %Store the oligos for printing later
+        Vec2store = [Repeatstringrev(Overhanglocation(Loc-1)+Overhangsize:Repeatlength) ...
+            num2str(InvertNucs(Spacerseqcurrent),'%u') Repeatstringrev(1:Overhanglocation(Loc)-1) ...
+            Repeatstringrev(Overhanglocation(Loc): ...
+            Overhanglocation(Loc)+Overhangsize-1)];
+        Oligostorage(Storagecounter,1:length(Vec2store)) = Vec2store;
+        Oligolengthstorage(Storagecounter) = length(Vec2store);
+        Oligospacerstorage(Storagecounter) = length(Repeatstringrev(Overhanglocation(Loc-1) ...
+            +Overhangsize:Repeatlength)) + 1;
+        Storagecounter = Storagecounter+1;
+        
+    else %Store the Primers for printing later
+        Vec2store = [num2str(InvertNucs(Spacerseqcurrent(1,end-Primeroverlap+1:end)),'%u') Repeatstringrev(1:Overhanglocation(Loc)+Overhangsize) ...
+            Reverseenzseq(1:end-3) '-''5'];
+        
+        Primerstorage(Storagecounter,1:length(Vec2store)) = fliplr(Vec2store);
+        Primerspacerstorage(Storagecounter) = length(Reverseenzseq) + ...
+            length(Repeatstringrev(1:Overhanglocation(Loc)+Overhangsize)) + 1;
+        Storagecounter = Storagecounter+1;
+        
+    end
+    
+    cprintf('Text', Repeatstringrev);
+    
+    cprintf('Strings', Spaceroption, InvertNucs(Spacerseqcurrent(1,1:Spacerlength-Primeroverlap)));
+    cprintf('[1,0,0]', Spaceroption, InvertNucs(Spacerseqcurrent(1,Spacerlength-Primeroverlap+1:Spacerlength)));
+    
+    cprintf('[1,0,0]', Repeatstringrev(1:Overhanglocation(Loc)+Overhangsize));
+    cprintf('Text', Repeatstringrev(Overhanglocation(Loc)+Overhangsize+1:Repeatlength));
+    fprintf('\n');
+    
+    %Reverse primer
+    if Pushforward == true
+        cprintf('Text', char(zeros(1,Degreeofpush1+Repeatlength+Spacerlength+...
+            Overhanglocation(Loc)+Overhangsize)));
+    else
+        cprintf('Text', char(zeros(1,Repeatlength+Spacerlength+...
+            Overhanglocation(Loc)+Overhangsize)));
+    end
+    cprintf('[1,0,0]', Reverseenzseq);
+    fprintf('\n\n');
+    
+    Loc = Loc-1;
+    
+    %PCR Product Forward string
+    if Pushforward == true
+        cprintf('Text', char(zeros(1,Degreeofpush2)));
+    else
+    end
+    cprintf('Text', '%s', char(zeros(1,Overhanglocation(Loc)-(Enzseqlength-1))));
+    cprintf('Text','GGCC');
+    cprintf('[1,0,0]','GGTCTC');
+    cprintf('Text', Repeatstring(Overhanglocation(Loc)-1:Repeatlength));
+    cprintf('Strings', Spaceroption, Spacerseqcurrent);
+    cprintf('Text', Repeatstring(1:Overhanglocation(Loc+1)+Overhangsize));
+    cprintf('Text', 'GAGACCGGCC');
+    fprintf('\n');
+    Loc = Loc+1;
+    
+    %PCR product reverse string
+    if Pushforward == true
+        cprintf('Text', char(zeros(1,Degreeofpush2)));
+    else
+    end
+    cprintf('Text', '%s', char(zeros(1,Overhanglocation(Loc-1)-(Enzseqlength-1))));
+    cprintf('Text', 'CCGGCCAGAG');
+    cprintf('Text', Repeatstringrev(Overhanglocation(Loc-1)-1:Repeatlength));
+    cprintf('Strings', Spaceroption, InvertNucs(Spacerseqcurrent));
+    cprintf('Text', Repeatstringrev(1:Overhanglocation(Loc)+Overhangsize));
+    cprintf('[1,0,0]', 'CTCTGG');
+    cprintf('Text', 'CCGG');
+    fprintf('\n\n');
+    Loc = Loc-1;
+    
+    %Enzyme-digested forward string
+    if Pushforward == true
+        cprintf('Text', '%s', char(zeros(1,Degreeofpush1+Overhanglocation(Loc)-1)));
+    else
+        cprintf('Text', '%s', char(zeros(1,Overhanglocation(Loc)-1)));
+    end
+    cprintf(Colorvec{Colorveccounter}, [Repeatstring(Overhanglocation(Loc): ...
+        Overhanglocation(Loc)+Overhangsize-1) ' ']); fprintf('\b');
+    cprintf('Text', Repeatstring(Overhanglocation(Loc)+Overhangsize:Repeatlength));
+    cprintf('Strings', Spaceroption, Spacerseqcurrent);
+    cprintf('Text', [Repeatstring(1:Overhanglocation(Loc+1)-1) ' ']); fprintf('\b');
+    fprintf('\n');
+    Colorveccounter = Colorveccounter+1;
+    Loc = Loc+1;
+    
+    %Enzyme-digested reverse string
+    if Pushforward == true
+        cprintf('Text', '%s', char(zeros(1,Degreeofpush1+Overhanglocation(Loc-1)+Overhangsize-1)));
+    else
+        cprintf('Text', '%s', char(zeros(1,Overhanglocation(Loc-1)+Overhangsize-1)));
+    end
+    cprintf('Text', Repeatstringrev(Overhanglocation(Loc-1)+Overhangsize:Repeatlength));
+    cprintf('Strings', Spaceroption, InvertNucs(Spacerseqcurrent));
+    cprintf('Text', [Repeatstringrev(1:Overhanglocation(Loc)-1) ' ']); fprintf('\b');
+    cprintf(Colorvec{Colorveccounter}, [Repeatstringrev(Overhanglocation(Loc): ...
+        Overhanglocation(Loc)+Overhangsize-1) ' ']); fprintf('\b');
+    fprintf('\n\n');
+    Loc = Loc+1;
+    
+    %Add lines
+    Sequencesize = Overhanglocation(Loc-1)+Spacerlength+Repeatlength-Overhanglocation(Loc-2);
+    fprintf('Sequence size:  %d\n', Sequencesize);
+    
+    cprintf('Text', '%s', char(8722*ones(1,2*Repeatlength+Spacerlength)));
+    fprintf('\n');
+    
+    Seqnum = Seqnum + 1;
+    
+    if Seqnum >= 9
+        Seqnum = -1;
+    else
+    end
+    
+    Progress = Progress + 1;
+    
+end
+
+%% Display the Final Results
+if Orderoligos == 1 %If the user wants to order oligos
+    fprintf('The oligos to order are:  \n');
+    [rows, ~] = size(Oligostorage);
+    Spacercount = 1;
+    Abovecutoff = false;
+    
+    for i = 1:rows
+        if mod(i,2) == 0 %If we are on an even number row
+            fprintf('Spacer %d, Reverse:  ', floor(Spacercount));
+            cprintf('Text', '%s', char(zeros(1,Overhangsize)));
+            cprintf('Text', '%s', Oligostorage(i,1:Oligospacerstorage(i)-1));
+            cprintf('Strings', '%s', [Oligostorage(i,Oligospacerstorage(i):Oligospacerstorage(i)+Spacerlength-1) ' ']); fprintf('\b');
+            cprintf('Text', '%s', [Oligostorage(i,Oligospacerstorage(i)+Spacerlength:Oligolengthstorage(i)-Overhangsize) ' ']); fprintf('\b');
+            cprintf('[0.98 0.71 0.08]', '%s', [Oligostorage(i,Oligolengthstorage(i)-Overhangsize+1:end) ' ']); fprintf('\b');
+            if Oligolengthstorage(i) > 60
+                cprintf('[1,0,0]', '%s', ' *');
+                Abovecutoff = true;
+            else
+            end
+            
+        else %If we are on an odd number row
+            fprintf('Spacer %d, Forward:  ', floor(Spacercount));
+            cprintf('[0.98 0.71 0.08]', '%s', [Oligostorage(i,1:Overhangsize) ' ']); fprintf('\b');
+            
+            if Overhangsize+1 == Oligospacerstorage(i)
+            else
+                cprintf('Text', '%s', Oligostorage(i,Overhangsize+1:Oligospacerstorage(i)-1));
+                
+            end
+            cprintf('Strings', '%s', [Oligostorage(i,Oligospacerstorage(i):Oligospacerstorage(i)+Spacerlength-1) ' ']); fprintf('\b');
+            
+            cprintf('Text', '%s', [Oligostorage(i,Oligospacerstorage(i)+Spacerlength:end) ' ']); fprintf('\b');
+            if Oligolengthstorage(i) > 60
+                cprintf('[1,0,0]', '%s', [char(zeros(1,Overhangsize)) ' *']);
+                Abovecutoff = true;
+            else
+            end
+        end
+        
+        fprintf('\n');
+        Spacercount = Spacercount+0.5;
+        
+    end
+    
+    if Abovecutoff == true;
+        cprintf('[1,0,0]', '%s', 'WARNING, * Indicates that the specified oligo is larger than 60 bp. Mutations are likely.');
+        fprintf('\n\n');
+    else
+        fprintf('\n');
+    end
+    
+else %If the user wants to order primers
+    fprintf('The primers to order are:  \n');
+    [rows, ~] = size(Primerstorage);
+    Spacercount = 1;
+    
+    for i = 1:rows
+        if mod(i,2) == 0 %If we are on an even number row
+            fprintf('Spacer %d, Reverse:  ', floor(Spacercount));
+        else %If we are on an odd number row
+            fprintf('Spacer %d, Forward:  ', floor(Spacercount));
+        end
+        Spacercount = Spacercount+0.5;
+        
+        cprintf('[1,0,0]', '%s', Primerstorage(i,1:Enzseqlength));
+        cprintf('Text', '%s', Primerstorage(i,14:Primerspacerstorage(i)-1));
+        cprintf('Strings','%s', Primerstorage(i,Primerspacerstorage(i):Primerspacerstorage(i)+Primeroverlap-1));
+        fprintf('\n');
+        
+    end
+    fprintf('\n');
+    
+end
+
+cprintf('Text', '%s', char(8722*ones(1,2*Repeatlength+Spacerlength)));
+fprintf('\n');
+
+%% Export output to Excel
+Descriptoralphabet = ['A'; 'B'; 'C'; 'D'; 'E'; 'F'; 'G'; 'H'; 'I'; 'J'; 'K'; 'L'; 'M'; 'N'; 'O'; 'P'];
+
+if Orderoligos == 1                 %If the user wants to order oligos
+        Descloc = 1;                %Keeps track of the excel output location (Increases by 1 each inner loop only)
+        Printoption = 'C6';                 %Determines where final array will output in Excel
+
+    if Desiredspacerorder_bin == 1  %If there are multiple spacer options for each location
+        [rows, ~] = size(Oligostorage);
+        Exceldescriptor = char(zeros(1,length(Prefix)+4)); %Storage for Oligo names ('X_A1_F')
+
+        Loc = 1;                    %Keeps track of the row in Oligostorage we're looking at
+
+        for i = 1:Spacernum %Number of spacers
+            for j = 1:Spaceroptioncount(i) %Number of options for each spacer
+                for k = 1:2 %Forward and reverse
+                    if k == 1 %Forward
+                        Exceldescriptor(Descloc,:) = [Prefix Descriptoralphabet(i) num2str(j) '_F'];
+                        
+                        Output = [Oligostorage(Loc,1:Oligospacerstorage(Loc)-1)  char(Spaceroptionseq(j,i)) Oligostorage(Loc,Oligospacerstorage(Loc)+Spacerlength:Oligolengthstorage(Loc))];
+                        Exceloutput(Descloc,1:length(Output)) = Output;
+                        
+                    elseif k == 2 %Reverse
+                        Exceldescriptor(Descloc,:) = [Prefix Descriptoralphabet(i) num2str(j) '_R'];
+                        
+                        if isempty(Oligostorage(Loc,1:Oligospacerstorage(Loc)-1)) == 1
+                            Output = fliplr([InvertNucs(char(Spaceroptionseq(j,i))) Oligostorage(Loc,Oligospacerstorage(Loc)+Spacerlength:Oligolengthstorage(Loc))]);
+                            
+                        else
+                            Output = fliplr([Oligostorage(Loc,1:Oligospacerstorage(Loc)-1)  InvertNucs(char(Spaceroptionseq(j,i))) Oligostorage(Loc,Oligospacerstorage(Loc)+Spacerlength:Oligolengthstorage(Loc))]);
+                            
+                        end
+                        
+                        Exceloutput(Descloc,1:length(Output)) = Output;
+                    end
+                    
+                    Loc = Loc+1;
+                    Descloc = Descloc+1;
+                end
+                Loc = Loc-2;
+            end
+            Loc = Loc+2;
+        end
+        
+    else %If there is a specified order for the spacers
+        Exceldescriptor = char(zeros(1,length(Prefix)+3));
+        
+        for i = 1:Spacernum
+            Exceldescriptor(Descloc,:) = [Prefix Descriptoralphabet(i) '_F'];
+            Output = Oligostorage(Descloc,1:Oligolengthstorage(Descloc));
+            Exceloutput(Descloc,1:length(Output)) = Output;
+            Descloc = Descloc+1;
+            
+            Exceldescriptor(Descloc,:) = [Prefix Descriptoralphabet(i) '_R'];
+            Output = fliplr(Oligostorage(Descloc,1:Oligolengthstorage(Descloc)));
+            Exceloutput(Descloc,1:length(Output)) = Output;
+            Descloc = Descloc+1;
+        end
+        
+    end
+    
+else %If the user wants to order primers
+        Descloc = 1;                        %Keeps track of the excel output location (Increases by 1 each inner loop only)
+        Printoption = 'F6';                 %Determines where final array will output in Excel
+
+    if Desiredspacerorder_bin == 1          %If there are multiple spacer options for each location
+        [rows, ~] = size(Primerstorage);
+        Exceldescriptor = char(zeros(1,length(Prefix)+4)); %Storage for primer names ('X_A1_F')
+        Loc = 1;                            %Keeps track of the row in Primerstorage we're looking at
+        
+        for i = 1:Spacernum %Number of spacers
+            for j = 1:Spaceroptioncount(i) %Number of options for each spacer
+                for k = 1:2 %Forward and reverse
+                    if k == 1
+                        Exceldescriptor(Descloc,:) = [Prefix Descriptoralphabet(i) num2str(j) '_F'];
+                        Currentspaceroption = char(Spaceroptionseq(j,i));
+                        Output = [Primerstorage(Loc,4:Primerspacerstorage(Loc)-1) Currentspaceroption(1:Primeroverlap)];
+                        Exceloutput(Descloc,1:length(Output)) = Output;
+                        
+                    elseif k == 2
+                        Exceldescriptor(Descloc,:) = [Prefix Descriptoralphabet(i) num2str(j) '_R'];
+                        Currentspaceroption = char(Spaceroptionseq(j,i));
+                        Currentspaceroption = fliplr(InvertNucs(Currentspaceroption));
+                        Output = [Primerstorage(Loc,4:Primerspacerstorage(Loc)-1) Currentspaceroption(1:Primeroverlap)];
+                        
+                        Exceloutput(Descloc,1:length(Output)) = Output;
+                    end
+                    
+                    Loc = Loc+1;
+                    Descloc = Descloc+1;
+                end
+                Loc = Loc-2;
+            end
+            Loc = Loc+2;
+        end
+        
+    else %If there is a specified order for the spacers
+        Exceldescriptor = char(zeros(1,length(Prefix)+3));
+        
+        for i = 1:Spacernum
+            Exceldescriptor(Descloc,:) = [Prefix Descriptoralphabet(i) '_F'];
+            Output = Primerstorage(Descloc,4:Primerspacerstorage(Descloc)+Primeroverlap-1);
+            Exceloutput(Descloc,1:length(Output)) = Output;
+            Descloc = Descloc+1;
+            
+            Exceldescriptor(Descloc,:) = [Prefix Descriptoralphabet(i) '_R'];
+            Output = Primerstorage(Descloc,4:Primerspacerstorage(Descloc)+Primeroverlap-1);
+            Exceloutput(Descloc,1:length(Output)) = Output;
+            Descloc = Descloc+1;
+        end
+        
+    end
+    
+end
+
+for i = 1:Descloc-1 %Convert the matrix of strings to a cell array for faster printing in Excel.
+    Exceloutputcell(i,1) = {Exceldescriptor(i,:)};
+    Exceloutputcell(i,2) = {Exceloutput(i,:)};
+    
+end
+
+%Print the final array.
+xlswrite('Accompanying Excel Workbook.xlsx', Exceloutputcell, 'Example_Output', Printoption);
+
+%% Final Completion Statement and Time Elapsed
+fprintf('Script completed!\n');
+toc
+
+##### SOURCE END #####
+--></body></html>

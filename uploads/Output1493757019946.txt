@@ -1,0 +1,148 @@
+ 
+To get started, type one of these: helpwin, helpdesk, or demo.
+For product information, visit www.mathworks.com.
+ 
+The enzyme selected for the assembly is:  BbsI.
+The DNA looks like: 
+TCTAATTTCTACGTTTGTAGAT
+AGATTAAAGATGCAAACATCTA
+
+Overhangs removed due to palindromes: 2
+ACGT
+
+Specified overhangs: 8
+ATCT
+CTAA
+TAGA
+GATT
+AGAT
+TCTA
+CGTT
+GCAA
+Overhang order:
+TAGA
+GCAA
+CGTT
+AGAT
+TCTA
+GATT
+
+DNA Prior to any cutting:
+TCTAATTTCTACGTTTGTAGATTGTCTTCAGTCTCGGAAGCTCAAAGAAGACGTCTAATTTCTACGTTTGTAGAT
+AGATTAAAGATGCAAACATCTAACAGAAGTCAGAGCCTTCGAGTTTCTTCTGCAGATTAAAGATGCAAACATCTA
+
+DNA backbone after cutting out the dropout:
+TCTAATTTCTACGTTTG                                     CTAA TTTCTACGTTTGTAGAT
+AGATTAAAGATGCAAACATCT                                        AAAGATGCAAACATCTA
+
+
+Procedure for Spacer:  1
+Primer Orientation:
+  5'-GGCCGAAGAC
+TCTAATTTCTACGTTTGTAGAT11111111111111111111111TCTAATTTCTACGTTTGTAGAT
+AGATTAAAGATGCAAACATCTA11111111111111111111111AGATTAAAGATGCAAACATCTA
+                                                              CAGAAGCCGG-5'
+
+PCR Amplicon:
+     GGCCGAAGACTGTAGAT11111111111111111111111TCTAATTTCTACGTTTGGTCTTCGGCC
+     CCGGCTTCTGACATCTA11111111111111111111111AGATTAAAGATGCAAACCAGAAGCCGG
+
+Digested Amplicon:
+                 TAGA T  11111111111111111111111TCTAATTTCTA 
+                     A11111111111111111111111AGATTAAAGAT GCAA 
+
+Sequence size:  39
+
+Procedure for Spacer:  2
+Primer Orientation:
+5'-GGCCGAAGAC
+    TCTAATTTCTACGTTTGTAGAT22222222222222222222222TCTAATTTCTACGTTTGTAGAT
+    AGATTAAAGATGCAAACATCTA22222222222222222222222AGATTAAAGATGCAAACATCTA
+                                                              CAGAAGCCGG-5'
+
+PCR Amplicon:
+   GGCCGAAGACTACGTTTGTAGAT22222222222222222222222TCTAATTTCTACGGTCTTCGGCC
+   CCGGCTTCTGATGCAAACATCTA22222222222222222222222AGATTAAAGATGCCAGAAGCCGG
+
+Digested Amplicon:
+               CGTT TGTAGAT  22222222222222222222222TCTAATT 
+                   ACATCTA22222222222222222222222AGATTAA AGAT 
+
+Sequence size:  41
+
+Procedure for Spacer:  3
+Primer Orientation:
+5'-GGCCGAAGAC
+        TCTAATTTCTACGTTTGTAGAT33333333333333333333333TCTAATTTCTACGTTTGTAGAT
+        AGATTAAAGATGCAAACATCTA33333333333333333333333AGATTAAAGATGCAAACATCTA
+                                                            CAGAAGCCGG-5'
+
+PCR Amplicon:
+   GGCCGAAGACTTTCTACGTTTGTAGAT33333333333333333333333TCTAATTGTCTTCGGCC
+   CCGGCTTCTGAAAGATGCAAACATCTA33333333333333333333333AGATTAACAGAAGCCGG
+
+Digested Amplicon:
+               TCTA CGTTTGTAGAT  33333333333333333333333T 
+                   GCAAACATCTA33333333333333333333333A GATT 
+
+Sequence size:  39
+
+The primers to order are:  
+Spacer 1, Forward:  5'-GGCCGAAGACTGTAGAT11111111
+Spacer 1, Reverse:  5'-GGCCGAAGACCAAACGTAGAAATTAGA11111111
+Spacer 2, Forward:  5'-GGCCGAAGACTACGTTTGTAGAT22222222
+Spacer 2, Reverse:  5'-GGCCGAAGACCGTAGAAATTAGA22222222
+Spacer 3, Forward:  5'-GGCCGAAGACTTTCTACGTTTGTAGAT33333333
+Spacer 3, Reverse:  5'-GGCCGAAGACAATTAGA33333333
+
+The primers described require you to have already created minimal, single-spacer arrays.
+The oligos needed in order to create those single-spacer arrays are shown below.
+Duplicated single-spacer arrays are not shown multiple times. They only appear once.
+
+Single-spacer array #1 oligos:
+5'-TAGATCATCGAACTGGATCTCAACAGCGT
+5'-TTAGACGCTGTTGAGATCCAGTTCGATGA
+
+Single-spacer array #2 oligos:
+5'-TAGATCCCGGCGTCAATACGGGATAATAT
+5'-TTAGATATTATCCCGTATTGACGCCGGGA
+
+Single-spacer array #3 oligos:
+5'-TAGATTCAGAAGTAAGTTGGCCGCAGTGT
+5'-TTAGACACTGCGGCCAACTTACTTCTGAA
+
+Single-spacer array #4 oligos:
+5'-TAGATTGAGACGAGTCTCGGAAGCTCAAT
+5'-TTAGATTGAGCTTCCGAGACTCGTCTCAA
+
+Single-spacer array #5 oligos:
+5'-TAGATATACCCATATAAATCAGCATCCAT
+5'-TTAGATGGATGCTGATTTATATGGGTATA
+
+Single-spacer array #6 oligos:
+5'-TAGATCAGAAACAACTCTGGCGCATCGGT
+5'-TTAGACCGATGCGCCAGAGTTGTTTCTGA
+
+Single-spacer array #7 oligos:
+5'-TAGATCGTCAGCCAGTTTAGTCTGACCAT
+5'-TTAGATGGTCAGACTAAACTGGCTGACGA
+
+Single-spacer array #8 was a duplicate and is not shown.
+
+Single-spacer array #9 oligos:
+5'-TAGATCTGGCCGTACATTTGTACGGCTCT
+5'-TTAGAGAGCCGTACAAATGTACGGCCAGA
+
+Single-spacer array #10 oligos:
+5'-TAGATCGGTCACCGTAACCAGCAAATCAT
+5'-TTAGATGATTTGCTGGTTACGGTGACCGA
+
+Single-spacer array #11 oligos:
+5'-TAGATCCCTGGAGAGAGCGAGATTCTCCT
+5'-TTAGAGGAGAATCTCGCTCTCTCCAGGGA
+
+Single-spacer array #12 was a duplicate and is not shown.
+
+
+Elapsed time is 6.984074 seconds.
+Script completed!

@@ -1,0 +1,15 @@
+ 
+To get started, type one of these: helpwin, helpdesk, or demo.
+For product information, visit www.mathworks.com.
+ 
+{Error using xlsread (line 251)
+Invoke Error, Dispatch Exception:
+Source: Microsoft Excel
+Description: Excel cannot open the file 'userParameters1493758630936.xlsx' because the file format or file extension is not valid.
+Verify that the file has not been corrupted and that the file extension matches the format of the file.
+Help File: xlmain11.chm
+Help Context ID: 0
+
+Error in Experimental_Driver_Jan2017 (line 14)
+[Parameters,Strings,~] = xlsread(workbook,'Example','H5:I26');
+} 

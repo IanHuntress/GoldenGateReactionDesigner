@@ -1,0 +1,297 @@
+<style>
+    body {
+        background-color: lightblue;
+        font-family: "Source Sans Pro";
+    }
+    
+    h1 {
+        color: white;
+        text-align: center;
+        font-family: "Source Sans Pro";
+    }
+
+    p {
+        font-family: "Source Sans Pro";
+        font-size: 20px;
+    }
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #333;
+        font-family:Source Sans Pro";
+    }
+
+    li {
+        float: left;
+    }
+
+    li a {
+        display: block;
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        font-family:Source Sans Pro";
+    }
+
+    li a:hover {
+        background-color: #111;
+    }
+
+    .help {
+        color: white;
+        background-color: #666;
+        border-radius: 10px;
+        display: none;
+        opacity: 1.0;
+        padding: 10px;
+        z-index: 100;
+    }
+
+    .help_link:hover + span {
+        display: inline;
+        position: absolute;
+    }
+</style>
+    
+<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
+
+<!-- CSS should be included from its own separate file, stop the copy pasta madness -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+<!--  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">  -->
+<ul>
+  <li><a class="active" href="/">Home</a></li>
+  <li><a href="WebForm">Web Form</a></li>
+  <li><a href="WorkbookUpload">Workbook Upload</a></li>
+  <li><a href="License">License</a></li>
+</ul>
+
+<body style="font-family:Source Sans Pro" >
+
+<div id= "DirectionsDiv1" name="DirectionsArea">
+<p align="center">CRISPR Reaction Planner</p>
+</div>
+
+<div id= "WebDiv1" name="WebForm">
+  <form id        =  "webForm"
+       enctype   =  "multipart/form-data"
+       action    =  "/webForm"
+       method    =  "post"
+  >
+      <center>
+      <!-- Job Title:<br>
+      <input type="text" name="jobTitle"><br>  -->
+      Sequence of DNA composing a Repeat:Dropout:Repeat in the 5'->3' direction:
+      <img src="HelpThumb.bmp" class="help_link" height="20" width="20" ><span class="help"><img src="HelpThumb.bmp" class="help_link" height="200" width="200" ></span><br>
+      <input type="text" name="Repeatdropoutrepeat"><br>
+      
+      Natural sequence of the repeat region in the 5'->3' direction:
+      <img src="HelpThumb.bmp" class="help_link" height="20" width="20" ><span class="help">HELP TEXT</span><br>
+      <input type="text" name="Repeattocheck"><br>
+      
+      
+      Desired number of CRISPR spacers in the final array.
+      <img src="HelpThumb.bmp" class="help_link" height="20" width="20"  ><span class="help"><img src="HelpThumb.bmp" class="help_link" height="200" width="200" ></span><br>
+      <input type="number" name="Spacernum" min="0" max="50" value="0"  onclick="SetMatrixSize()"><br>
+
+      Length of the CRISPR spacers in base pairs:
+      <img src="HelpThumb.bmp" class="help_link" height="20" width="20" ><span class="help">HELP TEXT</span><br>
+      <input type="number" name="Spacerlength" min="0" max="500"><br>
+
+      Length of repeat region.
+      <img src="HelpThumb.bmp" class="help_link" height="20" width="20" ><span class="help">HELP TEXT</span><br>
+      <input type="number" name="RepeatLength" min="0" max="500"><br>
+      
+      Specifying the assembly enzyme?
+      <img src="HelpThumb.bmp" class="help_link" height="20" width="20" ><span class="help">HELP TEXT</span><br>
+      <input type="radio" checked = "checked" name="Desiredenz" value="BsaI">BsaI<br>
+      <input type="radio" name="Desiredenz" value="BbsI">BbsI<br>
+      <input type="radio" name="Desiredenz" value="BsmBI">BsmBI<br>
+   
+      Would you like to specify the spacer sequences in order?
+      <img src="HelpThumb.bmp" class="help_link" height="20" width="20" ><span class="help">HELP TEXT</span><br>
+      <input type="radio" name="Desiredseq_bin" value="Yes" onclick="showInputFor('Desiredseq_bin')">Yes 
+      <input type="radio" checked = "checked" name="Desiredseq_bin" value="No" onclick="showInputFor('Desiredseq_bin')">No<br>
+      <!-- <input type="text" name="Desiredseq_text"><br> --> 
+      <div id= "optionsMatrix1" name="Desiredseq_text" style="display:none">
+         <textarea id="Matrix1" name="ArrayChoice" style="width: 500px; height: 60px">Input white space or comma separated spacer options, or copy paste from excel</textarea>
+      </div>
+      
+      Specifying multiple spacer options for each array location?
+      <img src="HelpThumb.bmp" class="help_link" height="20" width="20" ><span class="help">HELP TEXT</span><br>
+      <input type="radio" name="Desiredspacerorder_bin" value="Yes" onclick="showInputFor('Desiredspacerorder_bin')"> Yes 
+      <input type="radio" checked = "checked" name="Desiredspacerorder_bin" value="No" onclick="showInputFor('Desiredspacerorder_bin')">No<br>
+      
+      <div id= "optionsMatrix2" name="Desiredspacerorder_text" style="display:none">
+         <!-- <textarea id="Matrix2" name="MatrixChoice" style="width: 500px; height: 60px">Input white space separated spacer options, or copy paste from excel</textarea> -->
+ 
+        <table id= "Table2"> 
+          <tr>
+            <td> </td>
+          </tr>
+          <tr>
+            <td> </td>
+          </tr>
+          <tr>
+            <td> </td>
+          </tr>
+          <tr>
+            <td> </td>
+          </tr>
+          <tr>
+            <td> </td>
+          </tr>
+          <tr>
+            <td> </td>
+          </tr>
+          <tr>
+            <td> </td>
+          </tr>
+          <tr>
+            <td> </td>
+          </tr>
+          <tr>
+            <td> </td>
+          </tr>
+          <tr>
+            <td> </td>
+          </tr>
+          <tr>
+            <td> </td>
+          </tr>
+          <tr>
+            <td> </td>
+          </tr>
+          <tr>
+            <td> </td>
+          </tr>
+          <tr>
+            <td> </td>
+          </tr>
+
+        </table>
+
+      </div>
+      
+      Specifying whether to order primers or oligos?
+      <img src="HelpThumb.bmp" class="help_link" height="20" width="20" ><span class="help">HELP TEXT</span><br>
+      <input type="radio" name="Orderoligos_bin" value="PCRPrimers" onclick="showInputFor('Orderoligos_bin')">PCRPrimers
+      <input type="radio" name="Orderoligos_bin" value="Oligos" onclick="showInputFor('Orderoligos_bin')">Oligos<br>
+      <input type="number" name="Orderoligos_text" value="8"  min="0" max="50" style = "display: none;"><br>
+      
+      Specifying the prefix of names in the output?
+      <img src="HelpThumb.bmp" class="help_link" height="20" width="20" ><span class="help">HELP TEXT</span><br>
+      <input type="radio" name="Naming_bin" value="Yes" onclick="showInputFor('Naming_bin')">Yes
+      <input type="radio" checked = "checked"  name="Naming_bin" value="No" onclick="showInputFor('Naming_bin')">No<br>
+      <input type="text" name="Naming_text" style = "display: none;"><br>
+      
+  <input type="submit" value="Upload Webform" name="submit">
+  
+  </center>
+  </form>
+</div>
+
+<br><br>
+
+</body>
+
+<script>
+//Based on logic from mithunsatheesh found here: http://stackoverflow.com/questions/18421082/show-hide-div-if-checkbox-selected
+function showInputFor(X) {
+    if(document.getElementsByName(X)[0].checked) {
+        //document.getElementsByName(X.slice(0,-3)+"text")[0].style = "";
+        //document.getElementsByName(X.slice(0,-3)+"text")[0].style = "visibility: visible;";
+        document.getElementsByName(X.slice(0,-3)+"text")[0].style = "display: inherited;";
+    } else {
+        //document.getElementsByName(X.slice(0,-3)+"text")[0].style = "visibility: hidden;";
+        document.getElementsByName(X.slice(0,-3)+"text")[0].style = "display: none;";
+    }
+}
+
+function createCell(cell, text, style) {
+
+    var input = document.createElement("input");
+    input.name = "Desiredspacerorder_matrix_" + text;
+    input.style.width="40";
+    //Spec_Matrix.appendChild(input);
+    
+    var div = document.createElement('div'), // create DIV element
+        txt = document.createTextNode(text); // create text node
+    div.appendChild(input);                    // append text node to the DIV
+    div.setAttribute('class', style);        // set DIV class attribute
+    div.setAttribute('className', style);    // set DIV class attribute for IE (?!)
+    cell.appendChild(div);                   // append DIV to the table cell
+
+}
+
+function appendColumn(x) { //column management credited to Darko Bunic http://www.redips.net/
+    var tbl = document.getElementById('Table2')
+    // open loop for each row and append cell
+    for (var i = 0; i < tbl.rows.length; i++) { //i is more like j here
+        createCell(tbl.rows[i].insertCell(tbl.rows[i].cells.length), i + "_" + x, 'col');
+    }
+}
+  
+function deleteColumns(x) {
+    var tbl = document.getElementById('Table2'), // table reference
+        lastCol = tbl.rows[0].cells.length - 1,    // set the last column index
+        i, j;
+    // delete cells with index greater then 0 (for each row)
+    for (i = 0; i < tbl.rows.length; i++) {
+        for (j = lastCol; j > x; j--) {
+            tbl.rows[i].deleteCell(j);
+        }
+    }
+}
+  
+function SetMatrixSize() {
+    var tbl = document.getElementById('Table2');
+    var current = tbl.rows[0].cells.length - 1;
+    var target = document.getElementsByName("Spacernum")[0].value; //how many inputs in the matrix?
+    var rows = $('#optionsMatrix2 tr');
+    console.log(current, target);
+    //var Spec_Single = document.getElementsByName("Desiredseq_text")[0];
+    var Spec_Matrix = document.getElementsByName("Desiredspacerorder_text")[0];
+    var MaxOptions = 3;
+    if(current < target) {
+        //for (var i = current;i < target; i++) {
+            appendColumn(current);
+        //}
+    } else if(current > target) {
+        deleteColumns(target);
+    }
+}
+
+//These buttons are mutually exclusive, but I want them to have different class names, so listeners here instead
+document.getElementsByName("Desiredseq_bin")[0].addEventListener("click", function(){
+    document.getElementsByName("Desiredspacerorder_bin")[1].click();
+});
+document.getElementsByName("Desiredspacerorder_bin")[0].addEventListener("click", function(){
+    document.getElementsByName("Desiredseq_bin")[1].click();
+});
+
+$(document).ready(function() { //used stack overflow code from Phil Carter
+  $(window).keydown(function(event){
+    if(event.keyCode == 13) {
+      event.preventDefault();
+      return false;
+    }
+  });
+});
+
+function toggleHelp() {
+    var popup = document.getElementById("myPopup");
+    popup.classList.toggle("show");
+}
+</script>
+
+
+
+
+
+
+
+

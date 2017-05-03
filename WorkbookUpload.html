@@ -1,0 +1,61 @@
+<style>
+    body {
+        background-color: lightblue;
+        font-family: "Source Sans Pro";
+    }
+
+    h1 {
+        color: white;
+        text-align: center;
+    }
+
+    p {
+        font-family: "Source Sans Pro";
+        font-size: 20px;
+    }
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #333;
+    }
+
+    li {
+        float: left;
+    }
+
+    li a {
+        display: block;
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+    }
+
+    li a:hover {
+        background-color: #111;
+    }
+</style>
+
+<ul>
+  <li><a class="active" href="/">Home</a></li>
+  <li><a href="WebForm">Web Form</a></li>
+  <li><a href="WorkbookUpload">Workbook Upload</a></li>
+  <li><a href="License">License</a></li>
+</ul>
+
+<p>Complete upload the Golden Gate Reaction workbook.</p>
+<a href="workbook">Workbook Download</a>
+
+<div id= "UploadFormDiv1" name="UploadFormArea">
+<form id        =  "uploadForm"
+     enctype   =  "multipart/form-data"
+     action    =  "/useruploads"
+     method    =  "post"
+>
+<br>
+<input type="file" name="userParameters" />
+<input type="submit" value="Upload Workbook" name="submit">
+
+</form>
