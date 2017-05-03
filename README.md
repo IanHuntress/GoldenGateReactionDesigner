@@ -1,4 +1,4 @@
-# H1 GoldenGate Reaction Designer Website
+# GoldenGate Reaction Designer Website
 The site accepts user parameters for the GG reaction, enters them into exel format located in /uploads, runs the overhangFinder matlab script and returns the results to the user.
 
 * Dependencies: express,  multer, readLastLines, exceljs, express-rate-limit, Matlab
