@@ -1,4 +1,4 @@
-GoldenGate Website: tips, tricks, and problems.
+# H1 GoldenGate Reaction Designer Website
 The site accepts user parameters for the GG reaction, enters them into exel format located in /uploads, runs the overhangFinder matlab script and returns the results to the user.
 
 1. Images for thumbnails/help links are hosted from the images folder.
@@ -9,7 +9,7 @@ The site accepts user parameters for the GG reaction, enters them into exel form
 
 4. There are probably problems with unsanitized user input.
 
-5. The server should be launched by running "node Server.js" from the main directory (currently on port 7777)
+5. The server should be launched by running "node Server.js" from the main directory (currently on port 80)
 
 6. The navigation bar appears to change size sometimes. It should be included from a separate page, rather than copied over on every page.
 
@@ -17,5 +17,4 @@ The site accepts user parameters for the GG reaction, enters them into exel form
 Notes?
 If the matlab code errors because of bad inputs, what should the user see?
 There might be problems with paths between windows and linux, forward/backward slashes?
-The hard coded port is 7777. Change that based on RPI network?
 There are basically no protections against crashing the site with a flood of requests (I am not a CS Security major)
