@@ -1,0 +1,27 @@
+
+<link href='StyleSheet.css' rel='stylesheet' type='text/css'>
+
+<div id='menu'>
+    <ul>
+      <li><a class="active" href="/">Home</a></li>
+      <li><a href="WebformUpload.html">Web Form</a></li>
+      <li><a href="WorkbookUpload.html">Workbook Upload</a></li>
+      <li><a href="License.html">License</a></li>
+      <li><a href="Help.html">Help</a></li>
+    </ul>
+</div>
+
+<p>Complete upload the Golden Gate Reaction workbook.</p>
+<a href="workbook">Workbook Download</a>
+
+<div id= "UploadFormDiv1" name="UploadFormArea">
+<form id        =  "uploadForm"
+     enctype   =  "multipart/form-data"
+     action    =  "/useruploads"
+     method    =  "post"
+>
+<br>
+<input type="file" name="userParameters" />
+<input type="submit" value="Upload Workbook" name="submit">
+
+</form>

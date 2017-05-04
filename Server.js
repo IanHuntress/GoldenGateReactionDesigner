@@ -20,27 +20,8 @@ var storage =   multer.diskStorage({
 var upload = multer({ storage : storage}).single('userParameters');
 var params = multer();
 
-app.get('/',function(req,res){
-        req.socket.setTimeout(10 * 60 * 1000);
-      res.sendFile(__dirname + "/index.html");
-});
-
-app.get('/WebForm',function(req,res){
-        req.socket.setTimeout(10 * 60 * 1000);
-      res.sendFile(__dirname + "/WebformUpload.html");
-});
-
-app.get('/WorkbookUpload',function(req,res){
-        req.socket.setTimeout(10 * 60 * 1000);
-      res.sendFile(__dirname + "/WorkbookUpload.html");
-});
-
-app.get('/License',function(req,res){
-        req.socket.setTimeout(10 * 60 * 1000);
-      res.sendFile(__dirname + "/License.html");
-});
-
 app.use(express.static('images'));
+app.use('/', express.static(path.join(__dirname, 'site')))
 
 var uploadLimiter = new RateLimit({
   windowMs: 5*60*1000, // 5 mins
