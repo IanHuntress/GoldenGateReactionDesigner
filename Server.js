@@ -20,8 +20,8 @@ var storage =   multer.diskStorage({
 var upload = multer({ storage : storage}).single('userParameters');
 var params = multer();
 
-app.use(express.static('images'));
-app.use('/', express.static(path.join(__dirname, 'site')))
+app.use('/', express.static(path.join(__dirname, 'site')));
+app.use(express.static(path.join(__dirname, 'images')));
 
 var uploadLimiter = new RateLimit({
   windowMs: 5*60*1000, // 5 mins
