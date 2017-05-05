@@ -41,7 +41,10 @@ app.post('/useruploads', uploadLimiter ,function(req,res) {
         var uniqueTime = Date.now();
         var outputName = "Output" + uniqueTime + ".txt";
         var outputFile = __dirname + "/uploads/" + outputName;
-        var child = spawn("matlab",["-nodisplay", "-nosplash", "-nodesktop", "-logfile", outputFile, "-r", "cd matlabOverhangFinder; userSpreadsheet = '" + "../uploads/" + req.file.filename + "'; Experimental_Driver_Jan2017(userSpreadsheet); exit;"],{}); //this call is really stupid; it probably belongs in a .bat or something
+        if(req.file){
+            var fName = req.file.filename;
+        }
+        var child = spawn("matlab",["-nodisplay", "-nosplash", "-nodesktop", "-logfile", outputFile, "-r", "cd matlabOverhangFinder; userSpreadsheet = '" + "../uploads/" + fName + "'; Experimental_Driver_Jan2017(userSpreadsheet); exit;"],{}); 
         
         child.on('error', function(err) {
           console.log('Spawn Matlab Job failed ' + err);
@@ -55,7 +58,7 @@ app.post('/useruploads', uploadLimiter ,function(req,res) {
                         console.log(err);
                         return res.end("Error running Matlab");
                     }
-                      console.log("Completed upload Job: " + req.file.filename);
+                      console.log("Completed upload Job: " + fName);
                       return res.end(data);
                     });
                 } else if (lines.toLowerCase().indexOf("error") > -1) { //failure
@@ -64,14 +67,14 @@ app.post('/useruploads', uploadLimiter ,function(req,res) {
                                 console.log(err);
                                 return res.end("Error running Matlab");
                             }
-                              console.log("Upload job: " + req.file.filename + " erred");
+                              console.log("Upload job: " + fName + " erred");
                               return res.end(data);
                             });
                         }
                         
                         
                 setTimeout(function() {
-                    fs.unlinkSync("./uploads/" + req.file.filename, function(err){
+                    fs.unlinkSync("./uploads/" + fName, function(err){
                         if(err) {
                             console.log(err);
                             return res.end("5 minute job time-out reached");
