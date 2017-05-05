@@ -68,17 +68,21 @@ app.post('/useruploads', uploadLimiter ,function(req,res) {
                               return res.end(data);
                             });
                         }
+                        
+                        
+                setTimeout(function() {
+                    fs.unlinkSync("./uploads/" + req.file.filename, function(err){
+                        if(err) {
+                            console.log(err);
+                            return res.end("5 minute job time-out reached");
+                        }
+                    }); 
+                }, 5*60*1000);
+    
             }).catch(function(err) {console.log("ReadLines Error: " + err); return res.end("Failed to read upload: " + err + "?");} );
     });
 
-    setTimeout(function() {
-        fs.unlinkSync("./uploads/" + req.file.filename, function(err){
-            if(err) {
-                console.log(err);
-                return res.end("5 minute job time-out reached");
-            }
-        }); 
-    }, 5*60*1000);
+
     
   });
 });
@@ -198,23 +202,26 @@ app.post('/webform', uploadLimiter , params.array(), function (req, res, next) {
                             return res.end(data);
                             });
                         }
+                        
+                        setTimeout(function() {//if we actually have a file, delete it after 5 mins
+                            fs.unlinkSync("./uploads/" + filename, function(err){
+                                if(err) {
+                                    console.log(err);
+                                }
+                            }); 
+                        }, 5*60*1000);
+                        
                     }).catch(function(err) {console.log("ReadLines Error: " + err);  return res.end("Failed to interpret uploaded parameters");} ); //not able to read the output file that matlab made earlier
                 });
                 
                
-        setTimeout(function() {
-            fs.unlinkSync("./uploads/" + filename, function(err){
-                if(err) {
-                    console.log(err);
-                }
-            }); 
-        }, 5*60*1000);
+
 
     });
 
 app.get('/workbook',function(req,res){
     req.socket.setTimeout(10 * 60 * 10000);
-    res.sendFile(__dirname + "/workbook.xlsx");
+    res.sendFile(__dirname + "/site/workbook.xlsx");
 });
 
 app.listen(80,function(){
