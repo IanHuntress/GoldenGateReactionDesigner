@@ -40,7 +40,7 @@ app.post('/useruploads', uploadLimiter ,function(req,res) {
         req.socket.setTimeout(10 * 60 * 1000);
         var uniqueTime = Date.now();
         var outputName = "Output" + uniqueTime + ".txt";
-        var outputFile = __dirname + "/uploads/" + outputName;
+        var outputFile = path.join(__dirname,"/uploads/",outputName);
         if(req.file){
             var fName = req.file.filename;
         }
@@ -106,7 +106,7 @@ app.post('/webform', uploadLimiter , params.array(), function (req, res, next) {
     var uniqueTime = Date.now();
     var filename = "Websheet" + uniqueTime + ".xlsx";
     var outputName = "Output" + uniqueTime + ".txt";
-    var outputFile = __dirname + "/uploads/" + outputName;
+    var outputFile = path.join(__dirname,"/uploads/",outputName);
     var data = req.body;
     
     var workbook = new Excel.Workbook(); //this excel module cannot write onto existing sheets, always make a new one. <sadFace>
