@@ -5,8 +5,9 @@
 
 function output = DesignReactionFromSpreadsheet(workbook)
 close all
-%clear
+% clear
 clc
+% workbook = 'Accompanying Excel Workbook.xlsx';
 
 %% Read Inputs from Accompanying Excel Workbook
 tic %Begin timer.
@@ -20,7 +21,8 @@ Repeattocheck = Capitalize(char(Strings(3,5)));%Repeat region specified by the u
 Spacernum = Parameters(1); %A                  %Desired number of spacers in the final array.
 Overhangsize = 4;                              %Bp for the desired overhang size.
 Spacerlength = Parameters(3); %C               %Bp for the desired spacers.
-Repeatlength = Parameters(4); %C.2             %Length of the repeat region.  
+Repeatlength = length(Repeattocheck);          %Length of the repeat region. 
+Minmismatchnum = Parameters(4); %C.2           %Acceptable number of mismatches. 2 by default, 1 is another option.
 Overhangnum = (2*Spacernum)+2;                 %Number of overhangs to be defined.
 Desiredenz = char(Strings(10,5)); %D           %Binary for specifying the assembly enzyme.
 % Desiredenz = char(Strings(10,1)); %D           %Binary for specifying the assembly enzyme.
@@ -279,7 +281,7 @@ end
 %% Create the Reverse String
 Repeatstringrev = InvertNucs(Repeatstring); %Complement for the repeat region.
 
-fprintf('The DNA looks like: \n');          %Print 5'->3' and 3'->5'.
+fprintf('The repeat looks like: \n');          %Print 5'->3' and 3'->5'.
 disp([Repeatstring;Repeatstringrev]);
 
 Repeatstringrev = fliplr(Repeatstringrev);  %Flip RepeatStringRev for proper readibility.
@@ -293,8 +295,10 @@ count = 1;
 
 for i = 1:length(Position)
     if Length(i) == Overhangsize            %Note that Length here is not the length() command. 
+
         Palindromestorage(count) = Pal(i);      %Stores palindromic sequences.
         count = count+1;
+
     else
         
     end
@@ -482,7 +486,7 @@ while length(Compilspecoverhangs) < Overhangnum
             end
         end
         
-        if any(Mismatchvec <= 1) || Triedandfailed == true
+        if any(Mismatchvec <= Minmismatchnum-1) || Triedandfailed == true
             %Conditions:
             %1. When there is 1 or less mismatch, that means 3-4 bps are
             %   the same between the selected overhang and overhangs
@@ -1298,9 +1302,17 @@ else %If the user wants to order primers
     
 end
 
+if Orderoligos == 1
+    fprintf('Label         Oligo Sequence (5''->3'')\n');
+else
+    fprintf('Label         Primer Sequence (5''->3'')\n');
+end
+
 for i = 1:Descloc-1 %Convert the matrix of strings to a cell array for faster printing in Excel.
     Exceloutputcell(i,1) = {Exceldescriptor(i,:)};
+    fprintf('%s', [char(Exceloutputcell(i,1)) '   ']);
     Exceloutputcell(i,2) = {Exceloutput(i,:)};
+    fprintf('%s\n', char(Exceloutputcell(i,2)));
     
 end
 
