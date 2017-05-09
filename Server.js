@@ -75,7 +75,18 @@ app.post('/useruploads', uploadLimiter ,function(req,res) {
                               return res.end(data);
                               watcher.close();
                             });
-                        }
+                }  else if (lines.toLowerCase().indexOf("Licensing error") > -1) { //failure
+                    fs.readFile(outputFile, 'utf8' , (err, data) => {
+                      if (err) {
+                        console.log(err);
+                        return res.end("Error running Matlab");
+                        watcher.close();
+                    }
+                      console.log("Upload job: " + fName + " erred");
+                      return res.end(data);
+                      watcher.close();
+                    });
+                }
                         
                         
                 setTimeout(function() {
