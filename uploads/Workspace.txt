@@ -1,0 +1,7 @@
+This document simply fills space in uploads since github won't track empty folders.
+Since you are here, lets outline the rules for a user upload workspace.
+
+1. Remember, user input is evil, keep it locked up. For example, don't let users name their own files.
+2. (See rule 1.)
+3. (See rule 2.)
+...

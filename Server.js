@@ -50,43 +50,51 @@ app.post('/useruploads', uploadLimiter ,function(req,res) {
           console.log('Spawn Matlab Job failed ' + err);
         });
         
-        fs.watchFile(outputFile, (curr, prev) => {//watch for file updates
+        var watcher = fs.watchFile(outputFile, (curr, prev) => {//watch for file updates
             readLastLines.read(outputFile, 4).then(function(lines) { //check last lines
                 if (lines.indexOf("Script completed!") > -1) { // success
                     fs.readFile(outputFile, 'utf8' , (err, data) => {
                       if (err) {
                         console.log(err);
                         return res.end("Error running Matlab");
+                        watcher.close();
                     }
                       console.log("Completed upload Job: " + fName);
                       return res.end(data);
+                      watcher.close();
                     });
                 } else if (lines.toLowerCase().indexOf("error") > -1) { //failure
                             fs.readFile(outputFile, 'utf8' , (err, data) => {
                               if (err) {
                                 console.log(err);
                                 return res.end("Error running Matlab");
+                                watcher.close();
                             }
                               console.log("Upload job: " + fName + " erred");
                               return res.end(data);
+                              watcher.close();
                             });
                         }
                         
                         
                 setTimeout(function() {
+                    try {
                     fs.unlinkSync("./uploads/" + fName, function(err){
                         if(err) {
                             console.log(err);
-                            return res.end("5 minute job time-out reached");
+                        } else {
+                            return res.end("8 minute job time-out reached");
                         }
                     }); 
-                }, 5*60*1000);
+                    }
+                    catch(err) {
+                        console.log("Error destroying old user upload: " + err);
+                    }
+                }, 8*60*1000); //this sets the timeout
     
-            }).catch(function(err) {console.log("ReadLines Error: " + err); return res.end("Failed to read upload: " + err + "?");} );
-    });
+            }).catch(function(err) {console.log("ReadLines Error: " + err);} ); //this catch is not really a problem even though sometimes fs.watch fires when there is nothing to read
+    });                                                                         //We might generate huge log files in /var/log/node (eventually)
 
-
-    
   });
 });
 
@@ -184,7 +192,7 @@ app.post('/webform', uploadLimiter , params.array(), function (req, res, next) {
             spawn("matlab",["-nodisplay", "-nosplash", "-nodesktop", "-logfile", outputFile, "-r", "cd matlabOverhangFinder; userSpreadsheet = '" + "../uploads/" + filename + "'; Experimental_Driver_Jan2017(userSpreadsheet); exit;"],{});
         });
 
-        fs.watchFile(outputFile, function (curr, prev) {
+        var watcher = fs.watchFile(outputFile, function (curr, prev) {
                     // console.log(prev);
                     readLastLines.read(outputFile, 4).then(function(lines) {
                         // console.log(lines);
@@ -193,32 +201,39 @@ app.post('/webform', uploadLimiter , params.array(), function (req, res, next) {
                               if (err) {
                                 console.log(err);
                                 return res.end("Error running Matlab");
+                                watcher.close();
                             }
                             return res.end(data);
+                            watcher.close();
                             });
                         } else if (lines.toLowerCase().indexOf("error") > -1) {
                             fs.readFile(outputFile, 'utf8' , (err, data) => {
                               if (err) {
                                 console.log(err);
                                 return res.end("Error running Matlab");
+                                watcher.close();
                             }
                             return res.end(data);
+                            watcher.close();
                             });
                         }
-                        
-                        setTimeout(function() {//if we actually have a file, delete it after 5 mins
-                            fs.unlinkSync("./uploads/" + filename, function(err){
-                                if(err) {
-                                    console.log(err);
-                                }
-                            }); 
-                        }, 5*60*1000);
-                        
-                    }).catch(function(err) {console.log("ReadLines Error: " + err);  return res.end("Failed to interpret uploaded parameters");} ); //not able to read the output file that matlab made earlier
+                    }).catch(function(err) {console.log("ReadLines Error: " + err);} ); //not able to read the output file that matlab made earlier
                 });
                 
-               
-
+                setTimeout(function() {
+                    try {
+                    fs.unlinkSync("./uploads/" + filename, function(err){
+                        if(err) {
+                            console.log(err);
+                        } else {
+                            return res.end("8 minute job time-out reached");
+                        }
+                    }); 
+                    }
+                    catch(err) {
+                        console.log("Error destroying old user upload: " + err);
+                    }
+                }, 8*60*1000); //this sets the timeout
 
     });
 
