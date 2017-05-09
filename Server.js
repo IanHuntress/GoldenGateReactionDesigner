@@ -10,7 +10,7 @@ var RateLimit = require("express-rate-limit"); //nfriedly published under MIT li
 
 var storage =   multer.diskStorage({
   destination: function (req, file, callback) {
-    callback(null, './uploads');
+    callback(null, path.join(__dirname,"/uploads/"));
   },
   filename: function (req, file, callback) {
     callback(null, file.fieldname  + Date.now() + ".xlsx"); //this is for applying a unique name to uploads, might be necessary to handle parallel requests
