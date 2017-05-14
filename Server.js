@@ -45,7 +45,7 @@ app.post('/useruploads', uploadLimiter ,function(req,res) {
             var fName = req.file.filename;//this might be a terrible vulnerability
         }
         // var child = spawn("matlab",["-nodisplay", "-nosplash", "-nodesktop", "-logfile", outputFile, "-r", "cd matlabOverhangFinder; userSpreadsheet = '" + "../uploads/" + fName + "'; Experimental_Driver_Jan2017(userSpreadsheet); exit;"],{});  //this works only on windows because paths
-        var child = spawn("matlab",["-nodisplay", "-nosplash", "-nodesktop", "-logfile", outputFile, "-r", "cd matlabOverhangFinder; userSpreadsheet = '" + path.join(__dirname,"uploads",fName) + "'; Experimental_Driver_Jan2017(userSpreadsheet); exit;"],{}); 
+        var child = spawn("matlab",["-nodisplay", "-nosplash", "-nodesktop", "-logfile", outputFile, "-r", "cd " + path.join(__dirname,"matlabOverhangFinder") + "; userSpreadsheet = '" + path.join(__dirname,"uploads",fName) + "'; Experimental_Driver_Jan2017(userSpreadsheet); exit;"],{}); 
         
         child.on('error', function(err) {
           console.log('Spawn Matlab Job failed ' + err);
@@ -201,7 +201,7 @@ app.post('/webform', uploadLimiter , params.array(), function (req, res, next) {
     console.log(path.join(__dirname,"uploads",filename));
     workbook.xlsx.writeFile(path.join(__dirname,"uploads",filename))
         .then(function() {
-            spawn("matlab",["-nodisplay", "-nosplash", "-nodesktop", "-logfile", outputFile, "-r", "cd matlabOverhangFinder; userSpreadsheet = '" + path.join(__dirname,"uploads",filename) + "'; Experimental_Driver_Jan2017(userSpreadsheet); exit;"],{});
+            spawn("matlab",["-nodisplay", "-nosplash", "-nodesktop", "-logfile", outputFile, "-r", "cd " + path.join(__dirname,"matlabOverhangFinder") + "; userSpreadsheet = '" + path.join(__dirname,"uploads",filename) + "'; Experimental_Driver_Jan2017(userSpreadsheet); exit;"],{});
         });
 
         var watcher = fs.watchFile(outputFile, function (curr, prev) {
