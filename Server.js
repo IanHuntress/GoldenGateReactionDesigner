@@ -79,10 +79,10 @@ app.post('/useruploads', uploadLimiter ,function(req,res) {
                     fs.readFile(outputFile, 'utf8' , (err, data) => {
                       if (err) {
                         console.log(err);
-                        return res.end("Error running Matlab");
+                        return res.end("Error licensing Matlab");
                         watcher.close();
                     }
-                      console.log("Upload job: " + fName + " erred");
+                      console.log("Upload job: " + fName + " licensing error");
                       return res.end(data);
                       watcher.close();
                     });
