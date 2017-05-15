@@ -5,17 +5,18 @@
 % Accompanying Excel Workbook_BACKUP.xlsx
 function output = DesignReactionFromSpreadsheet(workbook)
 close all
-% clear
+%clear
 clc
-% workbook = 'Accompanying Excel Workbook.xlsx';
+%workbook = 'Accompanying Excel Workbook_BACKUP.xlsx';
 
 %% Read Inputs from Accompanying Excel Workbook
 tic %Begin timer.
 
-[Parameters,Strings,~] = xlsread(workbook,'Example','H5:I26');
+[Parameters,~,~] = xlsread(workbook,'Example','H5:I26');
 %Read in parameters and strings from the Excel sheet.
 
-Repeatdropoutrepeat = Capitalize(char(Strings(1,1))); %<Repeat>[Dropout]<Repeat>
+[~, Repeatdropoutrepeat, ~] = xlsread(workbook,'Example','D5:I5')
+Repeatdropoutrepeat = Capitalize(char(Repeatdropoutrepeat)); %<Repeat>[Dropout]<Repeat>
 % Repeattocheck = Capitalize(char(Strings(3,5)));%Repeat region specified by the user - test this for validity.
 [~,Repeattocheck,~] = xlsread(workbook,'Example','H7:I7');
 Repeattocheck = Capitalize(char(Repeattocheck));
@@ -40,15 +41,6 @@ Dropoutlength = length(Repeatdropoutrepeat)-2*Repeatlength; %Length of dropout s
 Dropoutseq = Repeatdropoutrepeat(Repeatlength+1:Repeatlength+Dropoutlength); %Dropout sequence.
 
 Reversedropoutseq = InvertNucs(Dropoutseq); %Create reverse sequence.
-disp(Repeatstring)
-disp(Spacernum)
-disp(Overhangsize)
-disp(Spacerlength)
-disp(Desiredseq_bin)
-disp(Desiredenz)
-disp(Orderoligos)
-disp(Naming_bin)
-disp(Desiredspacerorder_bin)
 %% Test Parameters for Validity
 if isempty(Repeatstring) || isnan(Spacernum) || isnan(Overhangsize) || isnan(Spacerlength) ...
         || isnan(Desiredseq_bin) || isnan(Desiredspacerorder_bin) || isempty(Desiredenz) ...
@@ -1328,8 +1320,8 @@ for i = 1:Descloc-1 %Convert the matrix of strings to a cell array for faster pr
     
 end
 
-%Print the final array.
-xlswrite(workbook, Exceloutputcell, 'Example_Output', Printoption);
+% Print the final array.
+% xlswrite(workbook, Exceloutputcell, 'Example_Output', Printoption);
 
 %% Final Completion Statement and Time Elapsed
 toc
