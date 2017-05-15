@@ -16,7 +16,8 @@ tic %Begin timer.
 %Read in parameters and strings from the Excel sheet.
 
 Repeatdropoutrepeat = Capitalize(char(Strings(1,1))); %<Repeat>[Dropout]<Repeat>
-Repeattocheck = Capitalize(char(Strings(3,5)));%Repeat region specified by the user - test this for validity.
+% Repeattocheck = Capitalize(char(Strings(3,5)));%Repeat region specified by the user - test this for validity.
+Repeattocheck = xlsread(workbook,'Example','H7');%Repeat region specified by the user - test this for validity.
 % Repeattocheck = Capitalize(char(Strings(3,1)));%Repeat region specified by the user - test this for validity.
 Spacernum = Parameters(1); %A                  %Desired number of spacers in the final array.
 Overhangsize = 4;                              %Bp for the desired overhang size.
@@ -24,7 +25,7 @@ Spacerlength = Parameters(3); %C               %Bp for the desired spacers.
 Repeatlength = length(Repeattocheck);          %Length of the repeat region. 
 Minmismatchnum = Parameters(4); %C.2           %Acceptable number of mismatches. 2 by default, 1 is another option.
 Overhangnum = (2*Spacernum)+2;                 %Number of overhangs to be defined.
-Desiredenz = char(Strings(10,5)); %D           %Binary for specifying the assembly enzyme.
+Desiredenz = char(xlsread(workbook,'Example','H14')); %D           % for specifying the assembly enzyme.
 % Desiredenz = char(Strings(10,1)); %D           %Binary for specifying the assembly enzyme.
 Desiredseq_bin = Parameters(8); %E             %Binary for specifying sequence of CRISPR spacers, in order.
 Desiredspacerorder_bin = Parameters(11); %F    %Binary for specifying multiple spacer options for each array location.
@@ -41,7 +42,7 @@ Reversedropoutseq = InvertNucs(Dropoutseq); %Create reverse sequence.
 if isempty(Repeatstring) || isnan(Spacernum) || isnan(Overhangsize) || isnan(Spacerlength) ...
         || isnan(Desiredseq_bin) || isnan(Desiredspacerorder_bin) || isempty(Desiredenz) ...
         || isnan(Orderoligos) || isnan(Naming_bin)
-    
+
     %If the user hasn't provided any of the critical parameters in Inputs.
     fprintf('ERROR: You have not provided sufficient parameters in the Inputs section.\n');
     return
