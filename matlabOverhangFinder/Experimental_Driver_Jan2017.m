@@ -5,9 +5,9 @@
 % Accompanying Excel Workbook_BACKUP.xlsx
 function output = DesignReactionFromSpreadsheet(workbook)
 close all
-%clear
+% clear
 clc
-%workbook = 'Accompanying Excel Workbook_BACKUP.xlsx';
+% workbook = 'Accompanying Excel Workbook.xlsx';
 
 %% Read Inputs from Accompanying Excel Workbook
 tic %Begin timer.
@@ -15,7 +15,7 @@ tic %Begin timer.
 [Parameters,~,~] = xlsread(workbook,'Example','H5:I26');
 %Read in parameters and strings from the Excel sheet.
 
-[~, Repeatdropoutrepeat, ~] = xlsread(workbook,'Example','D5:I5')
+[~, Repeatdropoutrepeat, ~] = xlsread(workbook,'Example','D5:I5');
 Repeatdropoutrepeat = Capitalize(char(Repeatdropoutrepeat)); %<Repeat>[Dropout]<Repeat>
 % Repeattocheck = Capitalize(char(Strings(3,5)));%Repeat region specified by the user - test this for validity.
 [~,Repeattocheck,~] = xlsread(workbook,'Example','H7:I7');
