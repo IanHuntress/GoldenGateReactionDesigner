@@ -813,13 +813,13 @@ cprintf('Text', Repeatstringrev);
 fprintf('\n\nDNA backbone after cutting out the dropout:\n');
 cprintf('Text', [Repeatstring(1:Backboneoverhanglocs(1,1)-1) char(zeros(1, length(Backboneoverhanglocs(1,1):Repeatlength)))]);
 cprintf('Text', char(zeros(1,Dropoutlength+Backboneoverhanglocs(2,1)-1)));
-cprintf(Colorvec{1+Spacernum}, [Repeatstring(Backboneoverhanglocs(2,1):Backboneoverhanglocs(2,2)) ' ']); fprintf('\b');
+cprintf(Colorvec{1+Spacernum}, [Repeatstring(Backboneoverhanglocs(2,1):Backboneoverhanglocs(2,2))]); %fprintf('\b');
 cprintf('Text', Repeatstring(Backboneoverhanglocs(2,2)+1:Repeatlength));
 
 fprintf('\n');
 cprintf('Text', Repeatstringrev(1:Backboneoverhanglocs(1,1)-1));
-cprintf(Colorvec{1}, [Repeatstringrev(Backboneoverhanglocs(1,1):Backboneoverhanglocs(1,2)) ' ']); fprintf('\b');
-cprintf('Text', [char(zeros(1,length(Backboneoverhanglocs(1,2):Repeatlength)-1)) '  ']); fprintf('\b\b');
+cprintf(Colorvec{1}, [Repeatstringrev(Backboneoverhanglocs(1,1):Backboneoverhanglocs(1,2))]); %fprintf('\b');
+cprintf('Text', [char(zeros(1,length(Backboneoverhanglocs(1,2):Repeatlength)-1))]); %fprintf('\b\b');
 cprintf('Text', char(zeros(1,Dropoutlength+length(Repeatstringrev(1:Backboneoverhanglocs(2,2))))));
 cprintf('Text', Repeatstringrev(Backboneoverhanglocs(2,2)+1:Repeatlength));
 fprintf('\n\n');
@@ -1005,10 +1005,10 @@ while Progress < Spacernum
         cprintf('Text', '%s', char(zeros(1,Overhanglocation(Loc)-1)));
     end
     cprintf(Colorvec{Colorveccounter}, [Repeatstring(Overhanglocation(Loc): ...
-        Overhanglocation(Loc)+Overhangsize-1) ' ']); fprintf('\b');
-    cprintf('Text', [Repeatstring(Overhanglocation(Loc)+Overhangsize:Repeatlength) '  ']); fprintf('\b\b'); 
+        Overhanglocation(Loc)+Overhangsize-1)]); %fprintf('\b');
+    cprintf('Text', [Repeatstring(Overhanglocation(Loc)+Overhangsize:Repeatlength)]); %fprintf('\b\b'); 
     cprintf('Strings', Spaceroption, Spacerseqcurrent);
-    cprintf('Text', [Repeatstring(1:Overhanglocation(Loc+1)-1) ' ']); fprintf('\b');
+    cprintf('Text', [Repeatstring(1:Overhanglocation(Loc+1)-1)]); %fprintf('\b');
     fprintf('\n');
     Colorveccounter = Colorveccounter+1;
     Loc = Loc+1;
@@ -1021,9 +1021,9 @@ while Progress < Spacernum
     end
     cprintf('Text', Repeatstringrev(Overhanglocation(Loc-1)+Overhangsize:Repeatlength));
     cprintf('Strings', Spaceroption, InvertNucs(Spacerseqcurrent));
-    cprintf('Text', [Repeatstringrev(1:Overhanglocation(Loc)-1) ' ']); fprintf('\b');
+    cprintf('Text', [Repeatstringrev(1:Overhanglocation(Loc)-1)]); %fprintf('\b');
     cprintf(Colorvec{Colorveccounter}, [Repeatstringrev(Overhanglocation(Loc): ...
-        Overhanglocation(Loc)+Overhangsize-1) ' ']); fprintf('\b');
+        Overhanglocation(Loc)+Overhangsize-1)]); %fprintf('\b');
     fprintf('\n\n');
     Loc = Loc+1;
     
@@ -1059,7 +1059,7 @@ if Orderoligos == 1 %If the user wants to order oligos
             cprintf('[0.98 0.71 0.08]', '%s', fliplr(Oligostorage(i,Oligolengthstorage(i)-Overhangsize+1:Oligolengthstorage(i))));
             cprintf('Text', '%s', [fliplr(Oligostorage(i,Oligospacerstorage(i)+Spacerlength:Oligolengthstorage(i)-Overhangsize)) ' ']); fprintf('\b');
             cprintf('Strings', '%s', fliplr(Oligostorage(i,Oligospacerstorage(i):Oligospacerstorage(i)+Spacerlength-1)));     
-            cprintf('Text', '%s', [fliplr(Oligostorage(i,1:Oligospacerstorage(i)-1)) ' ']); fprintf('\b');          
+            cprintf('Text', '%s', [fliplr(Oligostorage(i,1:Oligospacerstorage(i)-1))]); %fprintf('\b');          
 
             if Oligolengthstorage(i) > 60
                 cprintf('[1,0,0]', '%s', ' *');
@@ -1070,15 +1070,15 @@ if Orderoligos == 1 %If the user wants to order oligos
         else %If we are on an odd number row (AKA forward direction)
             fprintf('Spacer %d, Forward:  ', floor(Spacercount));
             fprintf('5''-');
-            cprintf('[0.98 0.71 0.08]', '%s', [Oligostorage(i,1:Overhangsize) ' ']); fprintf('\b'); 
+            cprintf('[0.98 0.71 0.08]', '%s', [Oligostorage(i,1:Overhangsize)]); %fprintf('\b'); 
             
             if Overhangsize+1 == Oligospacerstorage(i)
             else
-                cprintf('Text', '%s', [Oligostorage(i,Overhangsize+1:Oligospacerstorage(i)-1) ' ']); fprintf('\b');
+                cprintf('Text', '%s', [Oligostorage(i,Overhangsize+1:Oligospacerstorage(i)-1)]); %fprintf('\b');
      
             end
-            cprintf('Strings', '%s', [Oligostorage(i,Oligospacerstorage(i):Oligospacerstorage(i)+Spacerlength-1) ' ']); fprintf('\b');
-            cprintf('Text', '%s', [Oligostorage(i,Oligospacerstorage(i)+Spacerlength:end) ' ']); fprintf('\b');
+            cprintf('Strings', '%s', [Oligostorage(i,Oligospacerstorage(i):Oligospacerstorage(i)+Spacerlength-1)]); %fprintf('\b');
+            cprintf('Text', '%s', [Oligostorage(i,Oligospacerstorage(i)+Spacerlength:end)]); %fprintf('\b');
             if Oligolengthstorage(i) > 60
                 cprintf('[1,0,0]', '%s', [char(zeros(1,Overhangsize)) ' *']);
                 Abovecutoff = true;
@@ -1173,10 +1173,12 @@ else %If the user wants to order primers
             arrayvecstorage(count-1-numthatfailed:count-numthatfailed,1:length(arrayvec1)) = [arrayvec1 ; arrayvec2];
             fprintf('Single-spacer array #%d oligos:\n',i);
             fprintf('5''-');
-            cprintf('Text','%s', arrayvecstorage(count-1-numthatfailed,1:length(arrayvec1))); fprintf('\n');
+            cprintf('Text','%s', arrayvecstorage(count-1-numthatfailed,1:length(arrayvec1))); 
+            fprintf('\n');
             
             fprintf('5''-');
-            cprintf('Text','%s', arrayvecstorage(count-numthatfailed,1:length(arrayvec1))); fprintf('\n\n');
+            cprintf('Text','%s', arrayvecstorage(count-numthatfailed,1:length(arrayvec1))); 
+            fprintf('\n\n');
             
         else
             fprintf('Single-spacer array #%d was a duplicate and is not shown.\n\n',i);
