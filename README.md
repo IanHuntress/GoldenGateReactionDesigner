@@ -8,13 +8,13 @@ The site accepts user parameters for the GG reaction, enters them into exel form
 ## Renewing Matlab license:
 Since we run the server without a monitor, we will use Xming to catch the Matlab display from the Linux server on our Windows machine over SSH (the important parameter is -X to enable X11)
 
-1. Download and run Xming https://sourceforge.net/projects/xming/ (It says server because X11 has an unintuitive notion of what should be client and server)
+1. Download and run Xming https://sourceforge.net/projects/xming/ (It says server because X11 has an unintuitive notion of what should be client and server). It will prompt you about display options, just cancel out of that; as long as it is in the system tray you are good.
 
 2. Download and run putty https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html (You probably have a 64 bit system because you are reading this from the future)
 
-3. Make sure the X11 forwarding option is enabled in putty before you connect to the server (If you can't find its IP address, either connect a monitor and run ifconfig, or find someone from the tech department to complain to)
+3. Make sure the X11 forwarding option is enabled in putty before you connect to the server. The option is located in Connection --> SSH --> X11. As long as the box labelled "Enable X11 forwarding" is checked, you are good. (If you can't find the server's IP address, either connect a monitor and run ifconfig, or find someone from the tech department to complain to). 
 
-4. Navigate to Matlab's bin directory using cd and ls. (Usually located /usr/local/MATLAB/R2017a/bin/ or sometimes /home/koffas/MATLAB/bin)
+4. Log in to the server and then navigate to Matlab's bin directory using cd and ls. (Usually located /usr/local/MATLAB/R2017a/bin/ or sometimes /home/koffas/MATLAB/bin)
 
 5. Run the activate_matlab.sh from the bin (Usually ubuntu runs things like this ./activate_matlab.sh)
 
