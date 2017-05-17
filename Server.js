@@ -55,7 +55,7 @@ app.post('/useruploads', uploadLimiter ,function(req,res) {
           // res.setHeader('Content-type', 'text/plain');
           // return res.sendFile(outputFile);
           return res.download(outputFile, "Results.txt");
-        }, 30*1000); //Send job results after 30 seconds
+        }, 60*1000); //Send job results after 60 seconds
 
         setTimeout(function() {
             try {
@@ -169,7 +169,7 @@ app.post('/webform', uploadLimiter , params.array(), function (req, res, next) {
 
         setTimeout(function() {
           return res.download(outputFile, "Results.txt");
-        }, 30*1000); //Send job results after 30 seconds
+        }, 60*1000); //Send job results after 30 seconds
 
         setTimeout(function() {
             try {
