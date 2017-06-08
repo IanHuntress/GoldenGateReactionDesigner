@@ -291,20 +291,19 @@ disp([Repeatstring;Repeatstringrev]);
 Repeatstringrev = fliplr(Repeatstringrev);  %Flip RepeatStringRev for proper readibility.
 
 %% Define Palindromic Sequences to Avoid
-[Position, Length, Pal] = palindromes(Repeatstring,'Length',Overhangsize,'Complement', true);
 count = 1;
 %Searches through the repeatstring and finds all palindromic sequences.
 %These sequences are the same in the reverse string, so two overhangs
 %should be discarded for each palindromic sequence found here.
 
-for i = 1:length(Position)
-    if Length(i) == Overhangsize            %Note that Length here is not the length() command. 
-
-        Palindromestorage(count) = Pal(i);      %Stores palindromic sequences.
+for i = 1:Repeatlength-Overhangsize+1
+    Stringtocompare = Repeatstring(i:i+Overhangsize-1);
+    if Stringtocompare == fliplr(InvertNucs(Stringtocompare)) %If it is a palindrome
+        Position(count) = i;
+        Palindromestorage(count,1:4) = Stringtocompare;
         count = count+1;
-
-    else
         
+    else
     end
 end
 
@@ -320,7 +319,6 @@ else %If we don't, print that we did not find any palindromes.
     fprintf('\nOverhangs removed due to palindromes: %d\n',Palrows);
     
 end
-
 
 %% Step Through and Record all Potential Overhang Choices
 Overhangstorage = zeros(2*(Repeatlength-Overhangsize+1),Overhangsize);
@@ -381,7 +379,7 @@ end
 %due to palindromic sequences.
 Overhangstorage = Overhangstorage(1:rows-Palfailcounter,:);
 Overhangdesc = Overhangdesc(1:rows-Palfailcounter,:);
-
+Forwardoverhangcount = sum(Overhangdesc(:,2) < Repeatlength);
 Overhangstorage = char(Overhangstorage); %Convert to character array.
 
 %% Catalog Overhangs Already Specified by the Dropout Insert/Repeat Region
@@ -399,7 +397,7 @@ Specifiedoverhangs = [Backboneoverhangs ; InvertNucs(Backboneoverhangs)];
     %Stores both the Backboneoverhangs and their complements.
 
 Specifiedoverhanginfo = [Repeatlength+Enzymepull ; Backboneoverhanglocs(2,1) ; ...
-    Backboneoverhanglocs(1,1) ; Repeatlength+Backboneoverhanglocs(1,1)];
+    Backboneoverhanglocs(1,1) ; Repeatlength+Backboneoverhanglocs(1,1)-1];
     %Store the locations of those backbone overhangs
     
 [rows, ~] = size(Specifiedoverhangs);
@@ -447,12 +445,16 @@ while length(Compilspecoverhangs) < Overhangnum
     %Set location counter, which is used to specify the storage of
     %potential overhang choices and their information.
     
-    for i = 1:rowsOverhangstorage   %Scan through all overhangs.
+    for i = 1:Forwardoverhangcount   %Scan through all overhangs.
         
         for j = 1:Compilnumspecoverhangs      %Compare overhang to specified overhangs.
-            Mismatchvec(j) = sum(Overhangstorage(i,:) ~= Compilspecoverhangs(j,:));
-            %Count the number of mismatches between the overhang being
-            %tested and each of the already specified overhangs.
+            if Overhangstorage(i,:) == Compilspecoverhangs(j,:)
+                Mismatchvec(j) = -1;
+            elseif Compilspecoverhanginfo(j) < Repeatlength
+                Mismatchvec(j) = sum(Overhangstorage(i,:) ~= Compilspecoverhangs(j,:));
+            else
+                Mismatchvec(j) = sum(Overhangstorage(i,:) ~= fliplr(Compilspecoverhangs(j,:)));
+            end
             
         end
         
@@ -774,7 +776,9 @@ Overhanglocation = [Compilspecoverhanginfo(3) ; Overhanglocation(2:end,:) ; Comp
 Segmentlength = Segmentlength(2:end,1);
 
 fprintf('Overhang order:\n');
+disp(Backboneoverhangs(1,:));
 disp(Overhangorder);
+disp(Backboneoverhangs(2,:));
 
 %% Print the Assembly with Instructions
 Repeatstringrev = fliplr(Repeatstringrev);
