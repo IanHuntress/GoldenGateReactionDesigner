@@ -861,6 +861,7 @@ while Progress < Spacernum
     fprintf('Procedure for Spacer:  %d\n',Progress+1);
     fprintf('Primer Orientation:\n');
     Pushforward = false;
+    PrintN = false;
     Degreeofpush1 = 0;
     
     if Desiredseq_bin == 1 %If spacer sequences have been specified.
