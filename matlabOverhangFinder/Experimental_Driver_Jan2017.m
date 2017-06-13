@@ -397,7 +397,7 @@ Specifiedoverhangs = [Backboneoverhangs ; InvertNucs(Backboneoverhangs)];
     %Stores both the Backboneoverhangs and their complements.
 
 Specifiedoverhanginfo = [Repeatlength+Enzymepull ; Backboneoverhanglocs(2,1) ; ...
-    Backboneoverhanglocs(1,1) ; Repeatlength+Backboneoverhanglocs(1,1)-1];
+    Backboneoverhanglocs(1,1) ; Repeatlength+Backboneoverhanglocs(1,1)];
     %Store the locations of those backbone overhangs
     
 [rows, ~] = size(Specifiedoverhangs);
@@ -610,14 +610,19 @@ end
 
 %% Display Overhang Selection
 if Failed == 1          %If we reached no solution
-    fprintf('\n ERROR: A solution could not be determined with the parameters given.\n');
+    fprintf('\nERROR: A solution could not be determined with the parameters given.\n');
     return
     
 else                    %If we reached a solution
     fprintf('\nSpecified overhangs: %d\n',length(Compilspecoverhangs));
-    disp(Compilspecoverhangs)
-%     fprintf('\nOverhang choices: %d\n', length(Choicestorage));
-%     disp(char(Choicestorage));
+    for i = 1:length(Compilspecoverhanginfo)
+        if Compilspecoverhanginfo(i) < Repeatlength
+            fprintf(['5''-' Compilspecoverhangs(i,:) '-3'' (Overhang)\n']);
+        else
+            fprintf(['3''-' Compilspecoverhangs(i,:) '-5'' (Underhang)\n']);
+        end
+    end
+
 end
 
 %% Perform Comparisons Between all Overhang Choices and Create Match Index
@@ -775,10 +780,18 @@ Overhangorder = [Compilspecoverhangs(3,:); Overhangorder(2:end,:) ; Compilspecov
 Overhanglocation = [Compilspecoverhanginfo(3) ; Overhanglocation(2:end,:) ; Compilspecoverhanginfo(4)];
 Segmentlength = Segmentlength(2:end,1);
 
-fprintf('Overhang order:\n');
-disp(Backboneoverhangs(1,:));
-disp(Overhangorder);
-disp(Backboneoverhangs(2,:));
+fprintf('\nOverhang order:\n');
+fprintf(['3''-' Backboneoverhangs(1,:) '-5'' (Underhang)\n']);
+for i = 1:length(Overhanglocation)
+    if mod(i,2) ~= 0 %If current index is odd, this passes.
+        %Because the overhangs in overhanglocation alternate upper and
+        %over, odd indices are overhangs and even are underhangs.
+        fprintf(['5''-' Overhangorder(i,:) '-3'' (Overhang)\n']);
+    else %If current index is even, this passes.
+        fprintf(['3''-' Overhangorder(i,:) '-5'' (Underhang)\n']);
+    end
+end
+fprintf(['5''-' Backboneoverhangs(2,:) '-3'' (Overhang)\n']);
 
 %% Print the Assembly with Instructions
 Repeatstringrev = fliplr(Repeatstringrev);
@@ -887,6 +900,14 @@ while Progress < Spacernum
     else
     end
     
+    Desiredseqloc = Overhanglocation(Loc+1)+Overhangsize+Enzymepull-1;
+    if Desiredseqloc > Repeatlength %Test if reverse enzyme will be too far away
+        PrintN = true;
+        Nforprint = char(78*ones(1,Desiredseqloc-Repeatlength));
+    else
+        Nforprint = '';
+    end
+    
     if Orderoligos == 1 %Store oligos for printing later
         Vec2store = [Repeatstring(Overhanglocation(Loc): ...
             Overhanglocation(Loc)+Overhangsize-1) ...
@@ -913,10 +934,10 @@ while Progress < Spacernum
     cprintf('Text', Repeatstring(1:Overhanglocation(Loc)-Enzymepull-1));
     cprintf('[1,0,0]', Repeatstring(Overhanglocation(Loc)-Enzymepull:Repeatlength));
     
-    cprintf('[1,0,0]', Spaceroption, Spacerseqcurrent(1,1:Primeroverlap)); 
+    cprintf('[1,0,0]', Spaceroption, Spacerseqcurrent(1,1:Primeroverlap));
     cprintf('Strings', Spaceroption, Spacerseqcurrent(1,Primeroverlap+1:Spacerlength));
     
-    cprintf('Text', Repeatstring);
+    cprintf('Text', [Repeatstring Nforprint]);
     fprintf('\n');
     Loc = Loc+1;
     
@@ -925,7 +946,6 @@ while Progress < Spacernum
         cprintf('Text', char(zeros(1,Degreeofpush1)));
     else
     end
-    
     if Orderoligos == 1 %Store the oligos for printing later
         Vec2store = [Repeatstringrev(Overhanglocation(Loc-1)+Overhangsize:Repeatlength) ...
             num2str(InvertNucs(Spacerseqcurrent),'%u') Repeatstringrev(1:Overhanglocation(Loc)-1) ...
@@ -938,12 +958,22 @@ while Progress < Spacernum
         Storagecounter = Storagecounter+1;
         
     else %Store the Primers for printing later
-        Vec2store = [num2str(InvertNucs(Spacerseqcurrent(1,end-Primeroverlap+1:end)),'%u') Repeatstringrev(1:Overhanglocation(Loc)+Overhangsize+Enzymepull-1) ...
-            Reverseenzseq(1:end-3) '-''5'];
-        
+        Desiredseqloc = Overhanglocation(Loc)+Overhangsize+Enzymepull-1;
+        if PrintN == true
+            Vec2store = [num2str(InvertNucs(Spacerseqcurrent(1,end-Primeroverlap+1:end)),'%u') Repeatstringrev(1:end) ...
+                Nforprint Reverseenzseq(1:end-3) '-''5'];
+            
+            Primerspacerstorage(Storagecounter) = length(Reverseenzseq) + ...
+                length(Repeatstringrev(1:end)) + (Desiredseqloc-Repeatlength) + 1;
+            
+        else
+            Vec2store = [num2str(InvertNucs(Spacerseqcurrent(1,end-Primeroverlap+1:end)),'%u') Repeatstringrev(1:Desiredseqloc) ...
+                Reverseenzseq(1:end-3) '-''5'];
+            
+            Primerspacerstorage(Storagecounter) = length(Reverseenzseq) + ...
+                length(Repeatstringrev(1:Desiredseqloc)) + 1;
+        end
         Primerstorage(Storagecounter,1:length(Vec2store)) = fliplr(Vec2store);
-        Primerspacerstorage(Storagecounter) = length(Reverseenzseq) + ...
-            length(Repeatstringrev(1:Overhanglocation(Loc)+Overhangsize+Enzymepull-1)) + 1;
         Storagecounter = Storagecounter+1;
         
     end
@@ -953,7 +983,11 @@ while Progress < Spacernum
     cprintf('Strings', Spaceroption, InvertNucs(Spacerseqcurrent(1,1:Spacerlength-Primeroverlap)));
     cprintf('[1,0,0]', Spaceroption, InvertNucs(Spacerseqcurrent(1,Spacerlength-Primeroverlap+1:Spacerlength)));
     
-    cprintf('[1,0,0]', Repeatstringrev(1:Overhanglocation(Loc)+Overhangsize+Enzymepull-1));
+    if PrintN == true
+        cprintf('[1,0,0]', [Repeatstringrev(1:end) Nforprint]);
+    else
+        cprintf('[1,0,0]', Repeatstringrev(1:Desiredseqloc));
+    end
     cprintf('Text', Repeatstringrev(Overhanglocation(Loc)+Overhangsize+Enzymepull:Repeatlength));
     fprintf('\n');
     
@@ -971,18 +1005,22 @@ while Progress < Spacernum
     Loc = Loc-1;
 
     %PCR Product Forward string
-    fprintf('PCR Amplicon:\n');    
+    fprintf('PCR Amplicon:\n'); 
     if Pushforward == true
-        cprintf('Text', char(zeros(1,Degreeofpush2)));
+        cprintf('Text', char(zeros(1,Degreeofpush2))); 
     else
     end
-    cprintf('Text', '%s', char(zeros(1,Overhanglocation(Loc)-Enzseqlength-Enzymepull+2)));
-    cprintf('Text',Enzseq(4:7));
-    cprintf('[1,0,0]',Enzseq(end-5:end));
-    cprintf('Text', Repeatstring(Overhanglocation(Loc)-Enzymepull:Repeatlength)); 
-    cprintf('Strings', Spaceroption, Spacerseqcurrent); 
-    cprintf('Text', Repeatstring(1:Overhanglocation(Loc+1)+Overhangsize+Enzymepull-1));
-    cprintf('Text', InvertNucs(Reverseenzseq(1:end-3))); 
+    cprintf('Text', '%s', char(zeros(1,Overhanglocation(Loc)-Enzseqlength-Enzymepull+2))); 
+    cprintf('Text',Enzseq(4:7)); 
+    cprintf('[1,0,0]',Enzseq(end-5:end)); 
+    cprintf('Text', Repeatstring(Overhanglocation(Loc)-Enzymepull:Repeatlength));
+    cprintf('Strings', Spaceroption, Spacerseqcurrent);
+    if PrintN == true
+        cprintf('Text', [Repeatstring(1:end) Nforprint]);
+    else
+        cprintf('Text', Repeatstring(1:Overhanglocation(Loc+1)+Overhangsize+Enzymepull-1));
+    end
+    cprintf('Text', InvertNucs(Reverseenzseq(1:end-3)));
     fprintf('\n');
     Loc = Loc+1;
     
@@ -995,7 +1033,11 @@ while Progress < Spacernum
     cprintf('Text', InvertNucs(Enzseq(4:end)));
     cprintf('Text', Repeatstringrev(Overhanglocation(Loc-1)-Enzymepull:Repeatlength));
     cprintf('Strings', Spaceroption, InvertNucs(Spacerseqcurrent));
-    cprintf('Text', Repeatstringrev(1:Overhanglocation(Loc)+Overhangsize+Enzymepull-1));
+    if PrintN == true
+        cprintf('Text', [Repeatstringrev(1:end) Nforprint]);
+    else
+        cprintf('Text', Repeatstringrev(1:Overhanglocation(Loc)+Overhangsize+Enzymepull-1));
+    end
     cprintf('[1,0,0]', Reverseenzseq(1:6));
     cprintf('Text', Reverseenzseq(7:end-3));
     fprintf('\n\n');
@@ -1061,7 +1103,7 @@ if Orderoligos == 1 %If the user wants to order oligos
             fprintf('Spacer %d, Reverse:  ', floor(Spacercount));
             fprintf('5''-');
             cprintf('[0.98 0.71 0.08]', '%s', fliplr(Oligostorage(i,Oligolengthstorage(i)-Overhangsize+1:Oligolengthstorage(i))));
-            cprintf('Text', '%s', [fliplr(Oligostorage(i,Oligospacerstorage(i)+Spacerlength:Oligolengthstorage(i)-Overhangsize)) ' ']); fprintf('\b');
+            cprintf('Text', '%s', [fliplr(Oligostorage(i,Oligospacerstorage(i)+Spacerlength:Oligolengthstorage(i)-Overhangsize)) ' ']); %fprintf('\b');
             cprintf('Strings', '%s', fliplr(Oligostorage(i,Oligospacerstorage(i):Oligospacerstorage(i)+Spacerlength-1)));     
             cprintf('Text', '%s', [fliplr(Oligostorage(i,1:Oligospacerstorage(i)-1))]); %fprintf('\b');          
 
@@ -1193,7 +1235,7 @@ else %If the user wants to order primers
     end
     
 end
-fprintf('\b');
+%fprintf('\b');
 cprintf('Text', '%s', char(8722*ones(1,2*Repeatlength+Spacerlength)));
 fprintf('\n');
 
